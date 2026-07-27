@@ -1,0 +1,21 @@
+# Установите как ~/.codex/lmstudio.config.toml.
+# Запуск: codex --profile lmstudio
+
+model = "local/lmstudio"
+model_provider = "litellm_gateway"
+
+# Проверено с granite-4.0-h-tiny, загруженной в LM Studio с контекстом 248064.
+# Это поле не меняет серверную настройку LM Studio: проверьте её через `lms ps --json`.
+# Для другой модели укажите её фактическое значение.
+model_context_window = 248064
+model_reasoning_summary = "none"
+
+[model_providers.litellm_gateway]
+name = "LiteLLM Gateway"
+base_url = "http://127.0.0.1:4001/v1"
+env_key = "LITELLM_MASTER_KEY"
+env_key_instructions = "Export LITELLM_MASTER_KEY before starting Codex"
+wire_api = "responses"
+request_max_retries = 2
+stream_max_retries = 3
+stream_idle_timeout_ms = 600000

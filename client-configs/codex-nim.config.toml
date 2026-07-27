@@ -1,0 +1,19 @@
+# Профиль Codex для локального LiteLLM с NVIDIA NIM.
+# Установите как ~/.codex/nim.config.toml и запускайте: codex --profile nim
+
+model = "nim/agent"
+model_provider = "litellm_nim"
+
+# Безопасный общий предел для моделей, входящих в пул nim/agent.
+model_context_window = 131072
+model_reasoning_summary = "none"
+
+[model_providers.litellm_nim]
+name = "LiteLLM NVIDIA NIM"
+base_url = "http://127.0.0.1:4001/v1"
+env_key = "LITELLM_MASTER_KEY"
+env_key_instructions = "LITELLM_MASTER_KEY"
+wire_api = "responses"
+request_max_retries = 2
+stream_max_retries = 3
+stream_idle_timeout_ms = 300000

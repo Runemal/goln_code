@@ -1,0 +1,289 @@
+# Сформировано по каталогу NVIDIA NIM и живым проверкам 2026-07-25.
+# Точные идентификаторы моделей сохранены для совместимости клиентов.
+model_list:
+  - model_name: meta/llama-3.1-8b-instruct
+    litellm_params:
+      model: nvidia_nim/meta/llama-3.1-8b-instruct
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-3-nano-30b-a3b
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-nano-30b-a3b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: openai/gpt-oss-20b
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-20b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: mistralai/mistral-nemotron
+    litellm_params:
+      model: nvidia_nim/mistralai/mistral-nemotron
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-3-super-120b-a12b
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-3-ultra-550b-a55b
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-ultra-550b-a55b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nvidia-nemotron-nano-9b-v2
+    litellm_params:
+      model: nvidia_nim/nvidia/nvidia-nemotron-nano-9b-v2
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: openai/gpt-oss-120b
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-120b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: minimaxai/minimax-m3
+    litellm_params:
+      model: nvidia_nim/minimaxai/minimax-m3
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: stepfun-ai/step-3.7-flash
+    litellm_params:
+      model: nvidia_nim/stepfun-ai/step-3.7-flash
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: deepseek-ai/deepseek-v4-flash
+    litellm_params:
+      model: nvidia_nim/deepseek-ai/deepseek-v4-flash
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: meta/llama-3.2-11b-vision-instruct
+    litellm_params:
+      model: nvidia_nim/meta/llama-3.2-11b-vision-instruct
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-nano-12b-v2-vl
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-nano-12b-v2-vl
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemotron-parse
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-parse
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nvidia/nemoretriever-parse
+    litellm_params:
+      model: nvidia_nim/nvidia/nemoretriever-parse
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+
+# Стабильные локальные алиасы. Реальные model ID задаются через .env.
+  - model_name: local/ollama
+    litellm_params:
+      model: os.environ/OLLAMA_MODEL
+      api_base: os.environ/OLLAMA_API_BASE
+      timeout: 300
+    model_info:
+      mode: chat
+  - model_name: local/lmstudio
+    litellm_params:
+      model: os.environ/LM_STUDIO_MODEL
+      api_base: os.environ/LM_STUDIO_API_BASE
+      api_key: os.environ/LM_STUDIO_API_KEY
+      timeout: 300
+    model_info:
+      mode: chat
+
+# Динамические каталоги. Суффикс запроса передаётся локальному провайдеру:
+# ollama/gemma4:latest -> ollama_chat/gemma4:latest
+# lmstudio/granite-4.0-h-tiny -> openai/granite-4.0-h-tiny
+  - model_name: ollama/*
+    litellm_params:
+      model: ollama_chat/*
+      api_base: os.environ/OLLAMA_API_BASE
+      timeout: 300
+  - model_name: lmstudio/*
+    litellm_params:
+      model: openai/*
+      api_base: os.environ/LM_STUDIO_API_BASE
+      api_key: os.environ/LM_STUDIO_API_KEY
+      timeout: 300
+
+# Удобные маршрутизируемые алиасы. В каждом — только проверенные для задачи модели.
+  - model_name: nim/fast
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-20b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/chat
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-20b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/chat
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/agent
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/agent
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-20b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/code
+    litellm_params:
+      model: nvidia_nim/openai/gpt-oss-20b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/code
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/reasoning
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-super-120b-a12b
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/vision
+    litellm_params:
+      model: nvidia_nim/meta/llama-3.2-11b-vision-instruct
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/vision
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-nano-12b-v2-vl
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/vision
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/ocr
+    litellm_params:
+      model: nvidia_nim/meta/llama-3.2-11b-vision-instruct
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/ocr
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-nano-12b-v2-vl
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/ocr
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/ocr-structured
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-parse
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/ocr-structured
+    litellm_params:
+      model: nvidia_nim/nvidia/nemoretriever-parse
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+  - model_name: nim/omni
+    litellm_params:
+      model: nvidia_nim/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      api_key: os.environ/NVIDIA_NIM_API_KEY
+      api_base: https://integrate.api.nvidia.com/v1/
+    model_info:
+      mode: chat
+
+litellm_settings:
+  # Раскрывает wildcard-маршруты через живые /api/tags и /v1/models провайдеров.
+  check_provider_endpoint: true
+  drop_params: true
+  request_timeout: 60
+
+router_settings:
+  routing_strategy: latency-based-routing
+  # Codex sends this Responses API field, but NVIDIA NIM rejects it.
+  default_litellm_params:
+    additional_drop_params:
+      - client_metadata
+  num_retries: 1
+  timeout: 60
+  allowed_fails: 2
+  cooldown_time: 60
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/DATABASE_URL

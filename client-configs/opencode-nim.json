@@ -1,0 +1,54 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "litellm-nim/nim/agent",
+  "small_model": "litellm-nim/nim/fast",
+  "provider": {
+    "litellm-nim": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "LiteLLM NVIDIA NIM",
+      "options": {
+        "baseURL": "http://127.0.0.1:4001/v1",
+        "apiKey": "{env:LITELLM_MASTER_KEY}",
+        "timeout": 600000,
+        "chunkTimeout": 60000
+      },
+      "models": {
+        "nim/agent": {
+          "name": "NIM Agent — инструменты и код",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "nim/code": {
+          "name": "NIM Code — программирование",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "nim/reasoning": {
+          "name": "NIM Reasoning — сложные задачи",
+          "limit": {
+            "context": 131072,
+            "output": 8192
+          }
+        },
+        "nim/fast": {
+          "name": "NIM Fast — быстрые задачи",
+          "limit": {
+            "context": 4096,
+            "output": 1024
+          }
+        },
+        "nim/vision": {
+          "name": "NIM Vision — изображения",
+          "limit": {
+            "context": 65536,
+            "output": 4096
+          }
+        }
+      }
+    }
+  }
+}

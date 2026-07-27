@@ -1,0 +1,56 @@
+name: ${COMPOSE_PROJECT_NAME:-litellm-gateway}
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: litellm
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Укажите POSTGRES_PASSWORD в .env}
+    volumes:
+      - litellm_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm -d litellm"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  litellm:
+    image: ${LITELLM_IMAGE:-ghcr.io/berriai/litellm-database:main-stable}
+    init: true
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${LITELLM_PORT:-4001}:4000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml:ro
+    environment:
+      # Заглушка позволяет поднять локальный-only стек без NVIDIA-аккаунта.
+      # NVIDIA-маршруты требуют настоящий nvapi-ключ.
+      NVIDIA_NIM_API_KEY: ${NVIDIA_NIM_API_KEY:-nvapi-not-configured}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?Укажите LITELLM_MASTER_KEY в .env}
+      DATABASE_URL: postgresql://litellm:${POSTGRES_PASSWORD}@db:5432/litellm
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-ollama_chat/gemma4:latest}
+      OLLAMA_API_BASE: ${OLLAMA_API_BASE:-http://host.docker.internal:11434}
+      LM_STUDIO_MODEL: ${LM_STUDIO_MODEL:-openai/replace-with-loaded-model-id}
+      LM_STUDIO_API_BASE: ${LM_STUDIO_API_BASE:-http://host.docker.internal:1234/v1}
+      LM_STUDIO_API_KEY: ${LM_STUDIO_API_KEY:-lm-studio}
+    command: --config /app/config.yaml --host 0.0.0.0 --port 4000
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4000/health/liveliness', timeout=5)"
+      interval: 10s
+      timeout: 6s
+      retries: 12
+      start_period: 120s
+
+volumes:
+  litellm_db:

@@ -1,0 +1,19 @@
+# Установите как ~/.codex/ollama.config.toml.
+# Запуск: codex --profile ollama
+
+model = "local/ollama"
+model_provider = "litellm_gateway"
+
+# Подстройте под фактический контекст выбранной Ollama-модели.
+model_context_window = 32768
+model_reasoning_summary = "none"
+
+[model_providers.litellm_gateway]
+name = "LiteLLM Gateway"
+base_url = "http://127.0.0.1:4001/v1"
+env_key = "LITELLM_MASTER_KEY"
+env_key_instructions = "Export LITELLM_MASTER_KEY before starting Codex"
+wire_api = "responses"
+request_max_retries = 2
+stream_max_retries = 3
+stream_idle_timeout_ms = 600000
