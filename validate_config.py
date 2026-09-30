@@ -1,6 +1,7 @@
 """Offline validation of catalogue membership and safe gateway routing."""
 import json
 import pathlib
+import re
 import yaml
 
 
@@ -22,25 +23,38 @@ def validate(config, catalogs, checks):
             assert upstream in catalogs['nvidia'], f'Retired NVIDIA ID: {upstream}'
             if name in ('nim/agent', 'nim/code'):
                 assert upstream in tool_ok, f'Unverified tools in {name}: {upstream}'
-        elif params.get('api_key') == 'os.environ/CLOUDRU_API_KEY':
-            upstream = model.removeprefix('openai/')
-            assert upstream in catalogs['cloudru'], f'Unknown Cloud.ru ID: {upstream}'
+        elif name.startswith('cloudru/') or params.get('api_key', '').startswith('os.environ/CLOUDRU_'):
             assert not name.startswith('nim/'), f'Cloud.ru in automatic NVIDIA route: {name}'
+            assert params.get('api_key', '').startswith('os.environ/CLOUDRU_'), f'Wrong Cloud.ru credentials: {name}'
+            assert params.get('api_base', '').startswith('os.environ/CLOUDRU_'), f'Wrong Cloud.ru endpoint: {name}'
+            if model.startswith('os.environ/'):
+                assert name.startswith('cloudru/'), f'Custom Cloud.ru route needs provider prefix: {name}'
+                assert re.fullmatch(r'os\.environ/CLOUDRU_[A-Z0-9_]+_MODEL', model), f'Custom Cloud.ru model must use provider environment: {name}'
+                assert entry['model_info']['mode'] in ('chat', 'embedding'), f'Wrong custom Cloud.ru mode: {name}'
+                assert params.get('max_retries') == 0, f'Custom Cloud.ru SDK retries enabled: {name}'
+            else:
+                upstream = model.removeprefix('openai/')
+                assert upstream in catalogs['cloudru'], f'Unknown Cloud.ru ID: {upstream}'
             if entry['model_info']['mode'] == 'chat':
                 assert params.get('use_chat_completions_api') is True, f'Missing Responses bridge: {name}'
-        elif params.get('api_key') == 'os.environ/YANDEX_API_KEY':
+        elif name.startswith('yandex/') or params.get('api_key', '').startswith('os.environ/YANDEX_'):
             assert name.startswith('yandex/'), f'Yandex in another provider route: {name}'
+            assert params.get('api_key', '').startswith('os.environ/YANDEX_'), f'Wrong Yandex credentials: {name}'
             expected = {
                 'yandex/chat': ('YANDEX_CHAT_MODEL', 'chat'),
                 'yandex/lite': ('YANDEX_LITE_MODEL', 'chat'),
                 'yandex/embeddings': ('YANDEX_EMBEDDING_MODEL', 'embedding'),
                 'yandex/embeddings-query': ('YANDEX_QUERY_EMBEDDING_MODEL', 'embedding'),
             }
-            assert name in expected, f'Unknown Yandex alias: {name}'
-            variable, mode = expected[name]
-            assert model == 'os.environ/' + variable, f'Yandex URI must use environment: {name}'
-            assert entry['model_info']['mode'] == mode, f'Wrong Yandex endpoint mode: {name}'
-            assert params['api_base'] == 'os.environ/YANDEX_API_BASE'
+            if name in expected:
+                variable, mode = expected[name]
+                assert model == 'os.environ/' + variable, f'Yandex URI must use environment: {name}'
+                assert entry['model_info']['mode'] == mode, f'Wrong Yandex endpoint mode: {name}'
+            else:
+                assert re.fullmatch(r'os\.environ/YANDEX_[A-Z0-9_]+_MODEL', model), f'Yandex URI must use environment: {name}'
+                mode = entry['model_info']['mode']
+                assert mode in ('chat', 'embedding'), f'Wrong Yandex endpoint mode: {name}'
+            assert params.get('api_base', '').startswith('os.environ/YANDEX_'), f'Wrong Yandex endpoint: {name}'
             assert params['max_retries'] == 0, f'Yandex SDK retries enabled: {name}'
             if mode == 'chat':
                 assert params.get('use_chat_completions_api') is True, f'Missing Yandex Responses bridge: {name}'
@@ -74,4 +88,10 @@ if __name__ == '__main__':
                   'YANDEX_API_KEY', 'YANDEX_API_BASE', 'YANDEX_FOLDER_ID', 'YANDEX_CHAT_MODEL',
                   'YANDEX_LITE_MODEL', 'YANDEX_EMBEDDING_MODEL', 'YANDEX_QUERY_EMBEDDING_MODEL'):
         assert param in service['environment'], f'Missing Compose environment: {param}'
+    for deployment in config['model_list']:
+        for param in ('model', 'api_key', 'api_base'):
+            value = deployment['litellm_params'].get(param, '')
+            if value.startswith(('os.environ/YANDEX_', 'os.environ/CLOUDRU_')):
+                variable = value.removeprefix('os.environ/')
+                assert variable in service['environment'], f'Missing Compose environment: {variable}'
     print(f'YAML, catalogue membership and routing: OK ({len(config["model_list"])} deployments)')

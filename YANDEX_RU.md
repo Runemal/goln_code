@@ -35,6 +35,27 @@ Compose раскрывает `${YANDEX_FOLDER_ID}` из `.env`. При зада�
 
 NVIDIA-алиасы не переходят в Яндекс при ошибке. Автоматические повторы маршрутизатора (`num_retries: 0`), SDK (`max_retries: 0`) и fallback отключены. Для embeddings также обнулён `DEFAULT_MAX_RETRIES`: в закреплённой версии SDK использует этот default при нулевом значении параметра. Ошибки HTTP 500 проверены офлайн: повторного upstream-запроса нет. Для Responses явно используется Chat bridge LiteLLM; это не проверка нативного Responses API Яндекса. Поддержку tools у конкретной модели подтверждайте отдельно.
 
+## Текстовые модели
+
+В конфигурацию и меню Codex добавлены все 12 обычных текстовых `latest`-моделей из сохранённого каталога. Только AliceAI LLM Flash проверена живыми запросами. Остальные маршруты загружены и проверены офлайн; наличие в меню не подтверждает inference, tools или агентную работу. `rc`, `deprecated`, speech/realtime и embeddings в это меню не входят.
+
+| Модель | Маршрут шлюза | Переменная модели |
+| --- | --- | --- |
+| AliceAI LLM Flash | `yandex/chat` | `YANDEX_CHAT_MODEL` |
+| AliceAI LLM | `yandex/alice` | `YANDEX_ALICE_MODEL` |
+| YandexGPT Lite | `yandex/lite` | `YANDEX_LITE_MODEL` |
+| YandexGPT 5 Lite | `yandex/yandexgpt-5-lite` | `YANDEX_GPT5_LITE_MODEL` |
+| YandexGPT 5 Pro | `yandex/yandexgpt-5-pro` | `YANDEX_GPT5_PRO_MODEL` |
+| YandexGPT 5.1 | `yandex/yandexgpt-5.1` | `YANDEX_GPT51_MODEL` |
+| YandexGPT | `yandex/yandexgpt` | `YANDEX_GPT_MODEL` |
+| DeepSeek V4 Flash | `yandex/deepseek-v4-flash` | `YANDEX_DEEPSEEK_V4_FLASH_MODEL` |
+| DeepSeek V4.1 Flash | `yandex/deepseek-v4.1-flash` | `YANDEX_DEEPSEEK_V41_FLASH_MODEL` |
+| GPT-OSS 20B | `yandex/gpt-oss-20b` | `YANDEX_GPT_OSS_20B_MODEL` |
+| GPT-OSS 120B | `yandex/gpt-oss-120b` | `YANDEX_GPT_OSS_120B_MODEL` |
+| Qwen3.6-35B-A3B | `yandex/qwen` | `YANDEX_QWEN_MODEL` |
+
+В URI каждой модели используется ваш `YANDEX_FOLDER_ID`. Для своих развёртываний и дополнительных моделей следуйте [инструкции в README](README.md#как-добавить-модель-яндекса-или-cloudru).
+
 ## Каталог и проверки
 
 Для подключения Codex используйте готовый профиль [client-configs/codex-yandex.config.toml](client-configs/codex-yandex.config.toml) и инструкции в [CLIENTS_RU.md](CLIENTS_RU.md#яндекс-ai-studio). Профиль подключается к шлюзу через его ключ, выбирает `yandex/chat` и отключает повторы клиента. Живую агентную сессию Codex отдельно не запускали.

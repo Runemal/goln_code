@@ -36,6 +36,42 @@ class RoutingTest(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'Wrong Yandex endpoint mode'):
             validate(self.config, self.catalogs, self.checks)
 
+    def test_private_yandex_deployment_can_use_its_own_credentials_and_endpoint(self):
+        route = copy.deepcopy(next(m for m in self.config['model_list'] if m['model_name'] == 'yandex/chat'))
+        route['model_name'] = 'yandex/my-deployment'
+        route['litellm_params'].update(model='os.environ/YANDEX_MY_MODEL',
+            api_key='os.environ/YANDEX_CUSTOM_API_KEY', api_base='os.environ/YANDEX_CUSTOM_API_BASE')
+        self.config['model_list'].append(route)
+        validate(self.config, self.catalogs, self.checks)
+
+    def test_private_cloudru_deployment_can_use_an_id_outside_public_catalog(self):
+        route = copy.deepcopy(next(m for m in self.config['model_list'] if m['model_name'].startswith('cloudru/')))
+        route['model_name'] = 'cloudru/my-deployment'
+        route['litellm_params'].update(model='os.environ/CLOUDRU_MY_MODEL',
+            api_key='os.environ/CLOUDRU_CUSTOM_API_KEY', api_base='os.environ/CLOUDRU_CUSTOM_API_BASE', max_retries=0)
+        self.config['model_list'].append(route)
+        validate(self.config, self.catalogs, self.checks)
+
+    def test_private_yandex_credentials_cannot_enter_nvidia_route(self):
+        route = next(m for m in self.config['model_list'] if m['model_name'] == 'yandex/chat')
+        route['model_name'] = 'nim/chat'
+        route['litellm_params']['api_key'] = 'os.environ/YANDEX_CUSTOM_API_KEY'
+        with self.assertRaisesRegex(AssertionError, 'Yandex in another provider route'):
+            validate(self.config, self.catalogs, self.checks)
+
+    def test_private_yandex_uri_cannot_be_embedded_in_public_yaml(self):
+        route = next(m for m in self.config['model_list'] if m['model_name'] == 'yandex/chat')
+        route['model_name'] = 'yandex/my-deployment'
+        route['litellm_params']['model'] = 'openai/gpt://private-folder/my-model/latest'
+        with self.assertRaisesRegex(AssertionError, 'Yandex URI must use environment'):
+            validate(self.config, self.catalogs, self.checks)
+
+    def test_unknown_literal_cloudru_id_still_requires_public_catalog_membership(self):
+        route = next(m for m in self.config['model_list'] if m['model_name'].startswith('cloudru/'))
+        route['litellm_params']['model'] = 'openai/not-in-public-catalog'
+        with self.assertRaisesRegex(AssertionError, 'Unknown Cloud.ru ID'):
+            validate(self.config, self.catalogs, self.checks)
+
     def test_untested_tools_cannot_enter_agent_pool(self):
         super_model = copy.deepcopy(next(m for m in self.config['model_list']
                                         if m['model_name'] == 'nvidia/nemotron-3-super-120b-a12b'))

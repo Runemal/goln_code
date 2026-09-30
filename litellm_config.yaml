@@ -493,6 +493,106 @@ model_list:
     max_retries: 0
   model_info:
     mode: embedding
+- model_name: yandex/alice
+  litellm_params:
+    model: os.environ/YANDEX_ALICE_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/yandexgpt-5-lite
+  litellm_params:
+    model: os.environ/YANDEX_GPT5_LITE_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/yandexgpt-5-pro
+  litellm_params:
+    model: os.environ/YANDEX_GPT5_PRO_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/yandexgpt-5.1
+  litellm_params:
+    model: os.environ/YANDEX_GPT51_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/yandexgpt
+  litellm_params:
+    model: os.environ/YANDEX_GPT_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/deepseek-v4-flash
+  litellm_params:
+    model: os.environ/YANDEX_DEEPSEEK_V4_FLASH_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/deepseek-v4.1-flash
+  litellm_params:
+    model: os.environ/YANDEX_DEEPSEEK_V41_FLASH_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/gpt-oss-20b
+  litellm_params:
+    model: os.environ/YANDEX_GPT_OSS_20B_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/gpt-oss-120b
+  litellm_params:
+    model: os.environ/YANDEX_GPT_OSS_120B_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
+- model_name: yandex/qwen
+  litellm_params:
+    model: os.environ/YANDEX_QWEN_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+    max_retries: 0
+  model_info:
+    mode: chat
 litellm_settings:
   check_provider_endpoint: true
   drop_params: true

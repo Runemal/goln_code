@@ -96,6 +96,9 @@ class YandexGatewayTest(unittest.TestCase):
                    YANDEX_EMBEDDING_MODEL='openai/emb://test-folder/text-embeddings-v2-doc/latest',
                    YANDEX_QUERY_EMBEDDING_MODEL='openai/emb://test-folder/text-embeddings-v2-query/latest',
                    PYTHONPATH=str(cls.root), LITELLM_LOCAL_MODEL_COST_MAP='True', PYTHONDONTWRITEBYTECODE='1')
+        for route in config['model_list']:
+            variable = route['litellm_params']['model'].removeprefix('os.environ/')
+            env.setdefault(variable, 'openai/gpt://test-folder/' + route['model_name'].removeprefix('yandex/') + '/latest')
         cls.log = open(Path(cls.temp.name) / 'gateway.log', 'w+')
         cls.process = subprocess.Popen([shutil.which('litellm'), '--config', str(path),
                                        '--host', '127.0.0.1', '--port', str(port)],
@@ -151,6 +154,16 @@ class YandexGatewayTest(unittest.TestCase):
                 'messages': [{'role': 'user', 'content': 'synthetic'}], 'max_tokens': 16})
             self.assertEqual(json.loads(raw)['choices'][0]['message']['content'], 'MOCK_OK')
             self.assertEqual(call['body']['model'], f'gpt://test-folder/{suffix}/latest')
+
+    def test_codex_choices_are_available_without_inference(self):
+        self.backend.calls.clear()
+        req = urllib.request.Request(self.base + '/v1/models',
+            headers={'Authorization': 'Bearer sk-offline-gateway-test'})
+        with urllib.request.urlopen(req, timeout=10) as response:
+            listed = {m['id'] for m in json.load(response)['data']}
+        menu = json.loads((self.root / 'client-configs/codex-yandex.models.json').read_text())
+        self.assertTrue({m['slug'] for m in menu['models']} <= listed)
+        self.assertEqual(len(self.backend.calls), 0)
 
     def test_responses_bridge_and_metadata(self):
         raw, call = self.request('/v1/responses', {'model': 'yandex/chat', 'input': 'synthetic',

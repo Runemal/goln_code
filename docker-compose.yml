@@ -43,6 +43,16 @@ services:
       YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-not-configured}
       YANDEX_CHAT_MODEL: ${YANDEX_CHAT_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/aliceai-llm-flash/latest}
       YANDEX_LITE_MODEL: ${YANDEX_LITE_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt-lite/latest}
+      YANDEX_ALICE_MODEL: ${YANDEX_ALICE_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/aliceai-llm/latest}
+      YANDEX_GPT5_LITE_MODEL: ${YANDEX_GPT5_LITE_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt-5-lite/latest}
+      YANDEX_GPT5_PRO_MODEL: ${YANDEX_GPT5_PRO_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt-5-pro/latest}
+      YANDEX_GPT51_MODEL: ${YANDEX_GPT51_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt-5.1/latest}
+      YANDEX_GPT_MODEL: ${YANDEX_GPT_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt/latest}
+      YANDEX_DEEPSEEK_V4_FLASH_MODEL: ${YANDEX_DEEPSEEK_V4_FLASH_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/deepseek-v4-flash/latest}
+      YANDEX_DEEPSEEK_V41_FLASH_MODEL: ${YANDEX_DEEPSEEK_V41_FLASH_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/deepseek-v4.1-flash/latest}
+      YANDEX_GPT_OSS_20B_MODEL: ${YANDEX_GPT_OSS_20B_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/gpt-oss-20b/latest}
+      YANDEX_GPT_OSS_120B_MODEL: ${YANDEX_GPT_OSS_120B_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/gpt-oss-120b/latest}
+      YANDEX_QWEN_MODEL: ${YANDEX_QWEN_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/qwen3.6-35b-a3b/latest}
       YANDEX_EMBEDDING_MODEL: ${YANDEX_EMBEDDING_MODEL:-openai/emb://${YANDEX_FOLDER_ID:-not-configured}/text-embeddings-v2-doc/latest}
       YANDEX_QUERY_EMBEDDING_MODEL: ${YANDEX_QUERY_EMBEDDING_MODEL:-openai/emb://${YANDEX_FOLDER_ID:-not-configured}/text-embeddings-v2-query/latest}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?Укажите LITELLM_MASTER_KEY в .env}

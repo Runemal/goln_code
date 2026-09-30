@@ -204,7 +204,7 @@ cp client-configs/codex-yandex.config.toml ~/.codex/yandex.config.toml
 codex --profile yandex
 ```
 
-По умолчанию выбран `yandex/chat` → AliceAI LLM Flash (`latest`). В консоли команда `/model` открывает отдельный список из [client-configs/codex-yandex.models.json](client-configs/codex-yandex.models.json): AliceAI LLM Flash (`yandex/chat`) и YandexGPT Lite (`yandex/lite`, не проверена). Список содержит только два настроенных chat-маршрута; embeddings и speech/realtime для этого меню не подходят. Если upstream маршрута изменён в `.env`, обновите его отображаемое имя в JSON.
+По умолчанию выбран `yandex/chat` → AliceAI LLM Flash (`latest`). В консоли команда `/model` открывает отдельный список из [client-configs/codex-yandex.models.json](client-configs/codex-yandex.models.json): 12 настроенных текстовых моделей AliceAI, YandexGPT, DeepSeek, GPT-OSS и Qwen. Полный список маршрутов: [YANDEX_RU.md](YANDEX_RU.md#текстовые-модели). Живыми запросами проверена только Flash. Список содержит только настроенные chat-маршруты; embeddings и speech/realtime для этого меню не подходят. Если upstream маршрута изменён в `.env`, обновите его отображаемое имя в JSON.
 
 `model_catalog_json` задаёт локальный каталог для выбранного профиля. Он не создаёт маршруты на шлюзе и не подтверждает возможности модели: обычный `/v1/models` не содержит всех метаданных, которые нужны Codex. Каталог содержит краткие общие инструкции ассистенту и консервативные параметры клиента. Для другого провайдера можно подготовить свой JSON и указать его в соответствующем `*.config.toml`; остальные профили при этом сохраняют свои каталоги. Настройка проверена с Codex 0.159.2 без генерации.
 

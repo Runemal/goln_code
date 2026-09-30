@@ -25,15 +25,255 @@
       "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
     },
     {
-      "slug": "yandex/lite",
-      "display_name": "YandexGPT Lite — не проверена",
-      "description": "Через LiteLLM. Маршрут настроен; inference и tools этой модели не проверялись. Платная модель.",
+      "slug": "yandex/alice",
+      "display_name": "AliceAI LLM",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
       "default_reasoning_level": null,
       "supported_reasoning_levels": [],
       "shell_type": "unified_exec",
       "visibility": "list",
       "supported_in_api": true,
       "priority": 1,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/lite",
+      "display_name": "YandexGPT Lite",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 2,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/yandexgpt-5-lite",
+      "display_name": "YandexGPT 5 Lite",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 3,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/yandexgpt-5-pro",
+      "display_name": "YandexGPT 5 Pro",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 4,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/yandexgpt-5.1",
+      "display_name": "YandexGPT 5.1",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 5,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/yandexgpt",
+      "display_name": "YandexGPT",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 6,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/deepseek-v4-flash",
+      "display_name": "DeepSeek V4 Flash",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 7,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/deepseek-v4.1-flash",
+      "display_name": "DeepSeek V4.1 Flash",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 8,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/gpt-oss-20b",
+      "display_name": "GPT-OSS 20B",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 9,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/gpt-oss-120b",
+      "display_name": "GPT-OSS 120B",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 10,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/qwen",
+      "display_name": "Qwen3.6-35B-A3B",
+      "description": "Через Яндекс и LiteLLM. Inference, tools и агентная сессия не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 11,
       "support_verbosity": false,
       "context_window": 32768,
       "input_modalities": [
