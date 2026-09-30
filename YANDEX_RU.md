@@ -37,6 +37,8 @@ NVIDIA-алиасы не переходят в Яндекс при ошибке.
 
 ## Каталог и проверки
 
+Для подключения Codex используйте готовый профиль [client-configs/codex-yandex.config.toml](client-configs/codex-yandex.config.toml) и инструкции в [CLIENTS_RU.md](CLIENTS_RU.md#яндекс-ai-studio). Профиль подключается к шлюзу через его ключ, выбирает `yandex/chat` и отключает повторы клиента. Живую агентную сессию Codex отдельно не запускали.
+
 Снимок [catalogs/yandex-catalog.json](catalogs/yandex-catalog.json) содержит полный результат обнаружения с заменой ID каталога на `{folder_id}`. В нём есть текстовые, embedding и speech/realtime модели, включая версии `rc` и `deprecated`. Они не добавляются автоматически как Chat deployments.
 
 Начальные значения `.env.example` взяты из обнаруженного каталога. Наличие в каталоге не подтверждает inference, tools или качество ответа. Живая проверка AliceAI LLM Flash: Chat, Responses, Responses SSE и tools прошли четырьмя согласованными запросами. Другие текстовые модели и embeddings не вызывались. Актуальные результаты: [MODEL_STATUS.md](MODEL_STATUS.md).

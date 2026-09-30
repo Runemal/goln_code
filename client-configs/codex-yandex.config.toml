@@ -1,0 +1,28 @@
+# Профиль Codex для AliceAI LLM Flash через локальный LiteLLM.
+# Установите как ~/.codex/yandex.config.toml и запускайте: codex --profile yandex
+# LITELLM_MASTER_KEY — ключ шлюза; API-ключ Яндекса остаётся на сервере.
+
+model = "yandex/chat"
+model_provider = "litellm_yandex"
+
+# Консервативный лимит контекста клиента, а не заявленная ёмкость модели.
+model_context_window = 32768
+model_auto_compact_token_limit = 24000
+model_supports_reasoning_summaries = false
+model_reasoning_summary = "none"
+web_search = "disabled"
+
+[model_providers.litellm_yandex]
+name = "LiteLLM Yandex AliceAI Flash"
+base_url = "http://127.0.0.1:4001/v1"
+env_key = "LITELLM_MASTER_KEY"
+env_key_instructions = "Экспортируйте ключ локального шлюза LiteLLM, не API-ключ Яндекса."
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false
+request_max_retries = 0
+stream_max_retries = 0
+stream_idle_timeout_ms = 300000
+
+[features]
+enable_request_compression = false
