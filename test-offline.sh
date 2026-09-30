@@ -6,4 +6,4 @@ IMAGE="${OFFLINE_TEST_IMAGE:-ghcr.io/berriai/litellm-database@sha256:72360d8bd56
 docker run --rm --network none \
   -e PYTHONDONTWRITEBYTECODE=1 -e LITELLM_LOCAL_MODEL_COST_MAP=True \
   -v "$SCRIPT_DIR:/workspace:ro" -w /workspace \
-  --entrypoint python "$IMAGE" -m unittest -v test_cloudru_compat test_validate_config
+  --entrypoint python "$IMAGE" -m unittest -v test_cloudru_compat test_validate_config test_yandex_compat test_yandex_gateway

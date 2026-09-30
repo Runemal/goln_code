@@ -1,6 +1,4 @@
-# Каталоги и проверки: 2026-09-30; подробности в MODEL_STATUS.md.
-# Cloud.ru вызывается только по явно выбранному маршруту.
-# Секреты берутся из окружения; автоматические повторные запросы отключены.
+# Catalogues: 2026-09-30. Explicit provider routes; no automatic paid fallback.
 model_list:
 - model_name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
   litellm_params:
@@ -457,12 +455,47 @@ model_list:
     api_base: os.environ/NVIDIA_NIM_API_BASE
   model_info:
     mode: embedding
+- model_name: yandex/chat
+  litellm_params:
+    model: os.environ/YANDEX_CHAT_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+  model_info:
+    mode: chat
+- model_name: yandex/lite
+  litellm_params:
+    model: os.environ/YANDEX_LITE_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+    use_chat_completions_api: true
+  model_info:
+    mode: chat
+- model_name: yandex/embeddings
+  litellm_params:
+    model: os.environ/YANDEX_EMBEDDING_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+  model_info:
+    mode: embedding
+- model_name: yandex/embeddings-query
+  litellm_params:
+    model: os.environ/YANDEX_QUERY_EMBEDDING_MODEL
+    api_key: os.environ/YANDEX_API_KEY
+    api_base: os.environ/YANDEX_API_BASE
+    timeout: 60
+  model_info:
+    mode: embedding
 litellm_settings:
   check_provider_endpoint: true
   drop_params: true
   request_timeout: 60
   callbacks:
   - cloudru_compat.proxy_handler_instance
+  - yandex_compat.proxy_handler_instance
 router_settings:
   routing_strategy: latency-based-routing
   default_litellm_params:

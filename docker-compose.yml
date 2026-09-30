@@ -30,6 +30,7 @@ services:
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
       - ./cloudru_compat.py:/app/cloudru_compat.py:ro
+      - ./yandex_compat.py:/app/yandex_compat.py:ro
     environment:
       # Заглушка позволяет поднять локальный-only стек без NVIDIA-аккаунта.
       # NVIDIA-маршруты требуют настоящий nvapi-ключ.
@@ -37,6 +38,13 @@ services:
       NVIDIA_NIM_API_BASE: ${NVIDIA_NIM_API_BASE:-https://integrate.api.nvidia.com/v1}
       CLOUDRU_API_BASE: ${CLOUDRU_API_BASE:-https://foundation-models.api.cloud.ru/v1}
       CLOUDRU_API_KEY: ${CLOUDRU_API_KEY:-not-configured}
+      YANDEX_API_KEY: ${YANDEX_API_KEY:-not-configured}
+      YANDEX_API_BASE: ${YANDEX_API_BASE:-https://ai.api.cloud.yandex.net/v1}
+      YANDEX_FOLDER_ID: ${YANDEX_FOLDER_ID:-not-configured}
+      YANDEX_CHAT_MODEL: ${YANDEX_CHAT_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/aliceai-llm-flash/latest}
+      YANDEX_LITE_MODEL: ${YANDEX_LITE_MODEL:-openai/gpt://${YANDEX_FOLDER_ID:-not-configured}/yandexgpt-lite/latest}
+      YANDEX_EMBEDDING_MODEL: ${YANDEX_EMBEDDING_MODEL:-openai/emb://${YANDEX_FOLDER_ID:-not-configured}/text-embeddings-v2-doc/latest}
+      YANDEX_QUERY_EMBEDDING_MODEL: ${YANDEX_QUERY_EMBEDDING_MODEL:-openai/emb://${YANDEX_FOLDER_ID:-not-configured}/text-embeddings-v2-query/latest}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?Укажите LITELLM_MASTER_KEY в .env}
       DATABASE_URL: postgresql://litellm:${POSTGRES_PASSWORD}@db:5432/litellm
       OLLAMA_MODEL: ${OLLAMA_MODEL:-ollama_chat/gemma4:12b}

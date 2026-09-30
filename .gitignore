@@ -236,3 +236,8 @@ backups/
 to_git/
 frod_registrations_generated.txt
 system_prompt.md
+
+# Provider credentials supplied as separate dotenv files
+*.env
+*.env.*
+!.env.example

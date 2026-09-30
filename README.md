@@ -1,4 +1,4 @@
-# LiteLLM gateway: NVIDIA NIM, Cloud.ru, Ollama и LM Studio
+# LiteLLM gateway: NVIDIA NIM, Cloud.ru, Яндекс AI Studio, Ollama и LM Studio
 
 Переносимый OpenAI-совместимый прокси на LiteLLM 1.93.0 и PostgreSQL. Каталоги и результаты проверок обновлены **30 сентября 2026 года**. Текущий статус и ограничения: [MODEL_STATUS.md](MODEL_STATUS.md).
 
@@ -16,6 +16,8 @@
 | `nim/embeddings` | NVIDIA Nemotron 3 Embed, `/v1/embeddings` |
 | `cloudru/<ID>` | Cloud.ru, только явно выбранная модель |
 | `cloudru/BAAI/bge-m3` | Cloud.ru embeddings, платный запрос |
+| `yandex/chat`, `yandex/lite` | Яндекс AI Studio, явный выбор модели |
+| `yandex/embeddings`, `yandex/embeddings-query` | Яндекс: документы и поисковые запросы |
 | `local/ollama`, `local/lmstudio` | Модель из переменных `OLLAMA_MODEL` / `LM_STUDIO_MODEL` |
 | `ollama/*`, `lmstudio/*` | Динамический каталог локального провайдера |
 
@@ -23,7 +25,9 @@
 
 Cloud.ru не входит в алиасы `nim/*` и не используется как запасной провайдер. Автоматические повторы на шлюзе отключены (`num_retries: 0`), чтобы ошибка не запускала дополнительный inference-запрос. Клиентские повторы настраиваются отдельно.
 
-NVIDIA-алиас содержит один или несколько deployments; маршрутизатор выбирает одну модель по измеренной задержке. Полные каталоги находятся в [catalogs/](catalogs/): 81 NVIDIA ID и 95 Cloud.ru ID. Наличие ID в каталоге не подтверждает доступность inference; в YAML включено проверенное подмножество и совместимые старые Cloud.ru маршруты.
+Настройка и статус Яндекса: [YANDEX_RU.md](YANDEX_RU.md). Его маршруты используют API-ключ из окружения и не входят в NVIDIA-алиасы или автоматические fallback.
+
+NVIDIA-алиас содержит один или несколько deployments; маршрутизатор выбирает одну модель по измеренной задержке. Полные каталоги находятся в [catalogs/](catalogs/): 81 NVIDIA ID, 95 Cloud.ru ID и 27 Яндекс ID. У Яндекса полный URI включает ID каталога; в снимке он скрыт. Наличие ID в каталоге не подтверждает доступность inference; в YAML включено проверенное подмножество и совместимые старые Cloud.ru маршруты.
 
 ## Настройка
 
@@ -34,7 +38,7 @@ cp .env.example .env
 chmod 600 .env
 ```
 
-Замените `LITELLM_MASTER_KEY` и `POSTGRES_PASSWORD`. Для NVIDIA заполните `NVIDIA_NIM_API_KEY`, для Cloud.ru — `CLOUDRU_API_KEY`; неиспользуемые облачные ключи можно оставить заглушками. Укажите реально установленную модель Ollama и/или загруженную модель LM Studio. На проверенном хосте установлены `gemma4:12b` и `qwen3.5:9b-q8_0`, а LM Studio сейчас выключена.
+Замените `LITELLM_MASTER_KEY` и `POSTGRES_PASSWORD`. Для NVIDIA заполните `NVIDIA_NIM_API_KEY`, для Cloud.ru — `CLOUDRU_API_KEY`, для Яндекса — `YANDEX_API_KEY` и `YANDEX_FOLDER_ID`; неиспользуемые облачные ключи можно оставить заглушками. Укажите реально установленную модель Ollama и/или загруженную модель LM Studio. На проверенном хосте установлены `gemma4:12b` и `qwen3.5:9b-q8_0`, а LM Studio сейчас выключена.
 
 `NVIDIA_NIM_API_BASE` и `CLOUDRU_API_BASE` задают upstream URL. По умолчанию это публичные API провайдеров. На проверенном хосте прямой NVIDIA API отвечает HTTP 451; успешные NVIDIA-проверки выполнены через временный SSH-туннель с разрешённого сервера. Туннель не входит в комплект. До запуска облачных маршрутов проверьте доступность API из вашей сети.
 
@@ -55,7 +59,7 @@ docker compose ps
 ./test-offline.sh
 ```
 
-`test-offline.sh` запускает проверки преобразования Responses/tool history в закреплённом образе Docker без сети и без чтения `.env`. GitHub Actions выполняет только эти проверки и не получает runtime-ключи.
+`test-offline.sh` запускает проверки преобразования Responses/tool history в закреплённом образе Docker без сети и без чтения `.env`. Интеграционные тесты Яндекса запускают настоящий шлюз против локальной имитации API без внешней сети. GitHub Actions выполняет только эти проверки и не получает runtime-ключи.
 
 Следующие smoke-тесты вызывают выбранные модели. По умолчанию облачные скрипты используют NVIDIA; они не запускают обход Cloud.ru. Не подставляйте Cloud.ru ID в `CODEX_TEST_MODEL` без согласования расходов.
 
@@ -76,6 +80,7 @@ TEST_OMNI_MEDIA=1 ./test-multimodal.sh
 - [CLIENTS_RU.md](CLIENTS_RU.md) — Codex, Claude Code и OpenCode;
 - [CURL_EXAMPLES.md](CURL_EXAMPLES.md) — примеры Chat, Responses, tools и медиа;
 - [LOCAL_MODELS_RU.md](LOCAL_MODELS_RU.md) — Ollama и LM Studio;
+- [YANDEX_RU.md](YANDEX_RU.md) — Яндекс AI Studio и ограниченные платные проверки;
 - [DEPLOYMENT_RU.md](DEPLOYMENT_RU.md) — развёртывание на другом хосте;
 - [client-configs/](client-configs/) — шаблоны без секретов.
 

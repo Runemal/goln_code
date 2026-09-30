@@ -104,3 +104,11 @@ LM Studio на порту 1234 не работает; текущие Chat/Respon
 - Регрессии Cloud.ru Responses history выполнены в Docker без сети; live inference Cloud.ru при этой проверке не запускался.
 
 Скрипты проверяют непустой конечный текст; один только reasoning не считается успешным текстовым ответом. Статическая проверка сверяет NVIDIA/Cloud.ru IDs со снимками каталога, исключает embedding-модели из Chat и проверяет tools для агентных алиасов. GitHub Actions выполняет только офлайн-проверки.
+
+## Яндекс AI Studio
+
+30 сентября 2026 года endpoint `https://ai.api.cloud.yandex.net/v1/models` проверен чтением каталога с предоставленным API-ключом: HTTP 200, 27 записей, Bearer-авторизация работает. Генерация и embeddings при обнаружении не вызывались. Снимок с заменой ID каталога на `{folder_id}`: [catalogs/yandex-catalog.json](catalogs/yandex-catalog.json).
+
+Добавлены явные маршруты `yandex/chat`, `yandex/lite`, `yandex/embeddings`, `yandex/embeddings-query`. Начальные модели: AliceAI LLM Flash, YandexGPT Lite, Text Embeddings v2 Doc и Query. Эти маршруты не входят в NVIDIA-алиасы; автоматические повторы отключены. Пока живые Chat/Responses/SSE/tools и embeddings для конкретных моделей не подтверждены.
+
+Перед публикацией выполняются регрессии на локальной имитации OpenAI-совместимого API: передача Bearer-ключа, OpenAI-Project, URI, мост Responses → Chat, SSE, tools и раздельные embeddings-маршруты. Это проверяет наш шлюз, но не заменяет проверки доступности функций на стороне Яндекса. Подробности и запуск ограниченного теста: [YANDEX_RU.md](YANDEX_RU.md).

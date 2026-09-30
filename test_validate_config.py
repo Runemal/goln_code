@@ -24,6 +24,18 @@ class RoutingTest(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'Cloud.ru in automatic NVIDIA route'):
             validate(self.config, self.catalogs, self.checks)
 
+    def test_yandex_model_cannot_enter_another_provider_alias(self):
+        route = next(m for m in self.config['model_list'] if m['model_name'] == 'yandex/chat')
+        route['model_name'] = 'nim/chat'
+        with self.assertRaisesRegex(AssertionError, 'Yandex in another provider route'):
+            validate(self.config, self.catalogs, self.checks)
+
+    def test_yandex_embeddings_cannot_use_chat_mode(self):
+        route = next(m for m in self.config['model_list'] if m['model_name'] == 'yandex/embeddings')
+        route['model_info']['mode'] = 'chat'
+        with self.assertRaisesRegex(AssertionError, 'Wrong Yandex endpoint mode'):
+            validate(self.config, self.catalogs, self.checks)
+
     def test_untested_tools_cannot_enter_agent_pool(self):
         super_model = copy.deepcopy(next(m for m in self.config['model_list']
                                         if m['model_name'] == 'nvidia/nemotron-3-super-120b-a12b'))

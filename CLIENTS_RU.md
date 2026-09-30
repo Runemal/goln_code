@@ -173,3 +173,9 @@ OpenCode подставляет ключ из окружения благода�
 Выбирайте точный маршрут `cloudru/<ID>`, например `cloudru/Qwen/Qwen3-Coder-Next`. Ключ Cloud.ru хранится только в окружении серверного LiteLLM; клиенту нужен `LITELLM_MASTER_KEY`. Алиасы `nim/*` всегда остаются на NVIDIA и не переходят в Cloud.ru при ошибке.
 
 Для Codex доступен мост Responses → Chat Completions с hook `cloudru_compat.py`, сохраняющим порядок tool history. Его регрессии проверяются без сети; текущие живые Responses/SSE Cloud.ru не тестировались. При выборе платной модели отдельно настройте лимиты и повторы клиента: `request_max_retries` / `stream_max_retries` в NVIDIA-шаблоне не управляются `num_retries: 0` на шлюзе.
+
+## Яндекс AI Studio
+
+Модель выбирается явно: `yandex/chat` или `yandex/lite`. Серверный LiteLLM хранит API-ключ Яндекса и ID каталога в окружении; клиент использует `LITELLM_MASTER_KEY`. Для Responses применяется мост в Chat Completions. Возможность работы с инструментами зависит от выбранной модели; живые результаты указаны в [MODEL_STATUS.md](MODEL_STATUS.md).
+
+На один запуск можно выбрать маршрут в существующем профиле LiteLLM, например `codex --profile nim --model yandex/chat`. Для платных маршрутов отключите повторы клиента: значения повторов в NVIDIA-шаблоне относятся к клиенту и не изменяются настройкой шлюза `num_retries: 0`. Полная настройка: [YANDEX_RU.md](YANDEX_RU.md).
