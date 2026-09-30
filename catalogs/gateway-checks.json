@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-09-30T11:00:22.670845+00:00",
+  "environment": "isolated LiteLLM 1.93.0, no PostgreSQL, Cloud.ru disabled",
+  "tests": [
+    {
+      "name": "gateway catalogue and route loading",
+      "ok": true,
+      "route_count": 44
+    },
+    {
+      "name": "./test-responses.sh",
+      "ok": true,
+      "output": "Responses API: OK (2.759597 с)\nResponses SSE: OK (1.561681 с)\nResponses tools: OK (1.275520 с)\nВсе проверки совместимости Codex пройдены для openai/gpt-oss-20b.\n"
+    },
+    {
+      "name": "./test-local-models.sh local/ollama",
+      "ok": true,
+      "output": "МОДЕЛЬ             CHAT         RESPONSES    TOOLS       \n------------------------------------------------------------------------\nlocal/ollama             OK           OK           OK          \nВсе проверки локальных моделей пройдены.\n"
+    },
+    {
+      "name": "NVIDIA embeddings through gateway",
+      "ok": true,
+      "dimensions": 2048
+    }
+  ]
+}

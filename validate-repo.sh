@@ -11,12 +11,11 @@ for command_name in bash docker python3; do
   fi
 done
 
-bash -n \
-  test-models.sh \
-  test-local-models.sh \
-  test-multimodal.sh \
-  test-responses.sh \
-  validate-repo.sh
+for script in ./*.sh; do
+  bash -n "$script"
+done
+
+python3 validate_config.py
 
 python3 -c '
 import json
@@ -25,18 +24,11 @@ import pathlib
 import re
 import tomllib
 
-for path in (
-    "client-configs/claude-nim.settings.json",
-    "client-configs/opencode-nim.json",
-):
+for path in pathlib.Path("client-configs").glob("*.json"):
     with open(path, encoding="utf-8") as file:
         json.load(file)
 
-for path in (
-    "client-configs/codex-nim.config.toml",
-    "client-configs/codex-ollama.config.toml",
-    "client-configs/codex-lmstudio.config.toml",
-):
+for path in pathlib.Path("client-configs").glob("*.toml"):
     tomllib.loads(pathlib.Path(path).read_text(encoding="utf-8"))
 
 required_files = (
@@ -49,17 +41,6 @@ required_files = (
 for path in required_files:
     if not pathlib.Path(path).is_file():
         raise SystemExit(f"Отсутствует обязательный файл: {path}")
-
-litellm_config = pathlib.Path("litellm_config.yaml").read_text(encoding="utf-8")
-for required_fragment in (
-    "model_name: ollama/*",
-    "model: ollama_chat/*",
-    "model_name: lmstudio/*",
-    "model: openai/*",
-    "check_provider_endpoint: true",
-):
-    if required_fragment not in litellm_config:
-        raise SystemExit(f"В litellm_config.yaml отсутствует: {required_fragment}")
 
 for path in pathlib.Path(".").glob("*.sh"):
     if not os.access(path, os.X_OK):

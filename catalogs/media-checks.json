@@ -1,0 +1,56 @@
+[
+  {
+    "provider": "nvidia",
+    "model": "meta/llama-3.2-11b-vision-instruct",
+    "kind": "image",
+    "http_status": 200,
+    "seconds": 0.81,
+    "ok": true,
+    "checked_at": "2026-09-30T10:32:58.087666+00:00"
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-parse",
+    "kind": "structured",
+    "http_status": 200,
+    "seconds": 1.91,
+    "ok": true,
+    "checked_at": "2026-09-30T10:32:59.996347+00:00"
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-parse-2.0",
+    "kind": "structured",
+    "http_status": 500,
+    "seconds": 0.45,
+    "ok": false,
+    "checked_at": "2026-09-30T10:33:00.446522+00:00"
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "kind": "video",
+    "http_status": 503,
+    "seconds": 0.44,
+    "ok": false,
+    "checked_at": "2026-09-30T10:33:00.890261+00:00"
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "kind": "audio",
+    "http_status": 503,
+    "seconds": 0.64,
+    "ok": false,
+    "checked_at": "2026-09-30T10:33:01.535079+00:00"
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "kind": "image",
+    "http_status": 200,
+    "seconds": 7.01,
+    "ok": true,
+    "checked_at": "2026-09-30T10:33:04.282838+00:00"
+  }
+]

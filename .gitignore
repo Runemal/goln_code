@@ -223,3 +223,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Gateway private files and publication copy
+*.py[cod]
+.venv/
+*.bak
+*.pem
+*.key
+credentials*.json
+private/
+backups/
+to_git/
+frod_registrations_generated.txt
+system_prompt.md

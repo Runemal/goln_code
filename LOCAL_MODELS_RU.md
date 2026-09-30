@@ -1,5 +1,7 @@
 # Codex через LiteLLM с Ollama и LM Studio
 
+Состояние на 30 сентября: Ollama содержит `gemma4:12b` и `qwen3.5:9b-q8_0`; LM Studio выключена. Примеры Granite ниже описывают июльскую конфигурацию. Актуальные результаты: [MODEL_STATUS.md](MODEL_STATUS.md).
+
 LiteLLM предоставляет единый Responses API для облачных и локальных моделей:
 
 ```text
@@ -20,7 +22,7 @@ Codex → http://127.0.0.1:4001/v1 → LiteLLM в Docker
 
 Примеры: `ollama/gemma3:12b`, `ollama/yandex/YandexGPT-5-Lite-8B-instruct-GGUF:latest`, `lmstudio/granite-4.0-h-tiny`.
 
-Префикс LiteLLM входит в model ID: `ollama_chat/gemma4:latest` и `openai/granite-4.0-h-tiny`.
+Префикс LiteLLM входит в model ID: `ollama_chat/gemma4:12b` и `openai/granite-4.0-h-tiny`.
 
 ## Динамический каталог
 
@@ -79,11 +81,11 @@ curl -fsS http://127.0.0.1:11434/api/tags | jq -r '.models[].name'
 Настройки LiteLLM в `.env`:
 
 ```dotenv
-OLLAMA_MODEL=ollama_chat/gemma4:latest
+OLLAMA_MODEL=ollama_chat/gemma4:12b
 OLLAMA_API_BASE=http://host.docker.internal:11434
 ```
 
-Замените `gemma4:latest` на точное имя из `/api/tags`.
+Замените `gemma4:12b` на точное имя из `/api/tags`.
 
 Ollama по умолчанию не требует токен. Порт `11434`, открытый на `0.0.0.0`, ограничьте firewall для недоверенных сетей.
 

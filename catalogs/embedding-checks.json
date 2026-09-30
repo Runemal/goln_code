@@ -1,0 +1,22 @@
+[
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-embed-1b",
+    "kind": "embeddings",
+    "http_status": 200,
+    "seconds": 0.44,
+    "dimensions": 2048,
+    "ok": true,
+    "checked_at": "2026-09-30T10:33:04.723342+00:00"
+  },
+  {
+    "provider": "cloudru",
+    "model": "BAAI/bge-m3",
+    "kind": "embeddings",
+    "http_status": 200,
+    "seconds": 0.41,
+    "dimensions": 1024,
+    "ok": true,
+    "checked_at": "2026-09-30T10:33:05.137621+00:00"
+  }
+]

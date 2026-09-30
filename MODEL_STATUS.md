@@ -1,108 +1,106 @@
-# Состояние моделей NVIDIA NIM
+# Состояние моделей на 30 сентября 2026 года
 
-Первичная проверка выполнена 25 июля 2026 года; текстовые маршруты и каталог повторно проверены 27 июля 2026 года для текущего NVIDIA API-аккаунта.
+Получены полные списки `/v1/models`: **81 NVIDIA ID**, **95 Cloud.ru ID**. Снимки и обезличенные результаты лежат в [catalogs/](catalogs/). Каталог не означает доступность inference или поддержку всех API.
 
-- Записей в `/v1/models`: **118**.
-- Текстовые модели проверялись полным ответом `chat/completions` без streaming.
-- Таймаут первичного отбора: 30 секунд.
-- Вызов инструментов проверялся отдельным запросом с JSON Schema.
-- Мультимодальные модели проверялись на синтетических PNG, MP4 и WAV.
-- Доступность и загрузка NVIDIA меняются со временем.
+В таблицах ниже приведены сохранённые проверки upstream, а не оценка качества моделей. Текстовый запрос ограничивался 128 выходными токенами, запрос tools — 1024. Таймаут chat составлял 40 секунд, tools — 50 секунд. Время ответа зависит от нагрузки.
 
-## Проверенные локальные маршруты
+## NVIDIA NIM
 
-Повторная проверка Ollama и LM Studio выполнена 27 июля 2026 года через активный контейнер LiteLLM и Codex CLI.
+Прямой API NVIDIA с проверенного хоста возвращает HTTP 451. Проверки выполнены с тем же ключом через временный SSH-туннель с разрешённого сервера. По умолчанию проект использует публичный API; сетевую доступность нужно обеспечить отдельно.
 
-| Маршрут | Модель | Chat | Responses | Tools | Codex |
-| --- | --- | --- | --- | --- | --- |
-| `local/ollama` | `gemma4:latest` | успешно | успешно | успешно | успешно |
-| `local/ollama` напрямую | `yandex/YandexGPT-5-Lite-8B-instruct-GGUF:latest` | успешно | — | — | — |
-| `local/lmstudio` | `granite-4.0-h-tiny` | успешно | успешно | успешно | успешно |
-
-Динамическое обнаружение LiteLLM 1.93.0 проверено отдельно: опубликованы 5 маршрутов `ollama/*` и 2 маршрута `lmstudio/*`. Точные маршруты `ollama/gemma4:latest` и `lmstudio/granite-4.0-h-tiny` прошли Chat, Responses и tools; `lmstudio/text-embedding-nomic-embed-text-v1.5` успешно прошёл `/v1/embeddings`. Проверка каталога не означает, что каждая найденная модель поддерживает все эти API.
-
-LM Studio была проверена без API-аутентификации, с привязкой `0.0.0.0:1234` и контекстом `248064`. При этой конфигурации суммарное наблюдаемое использование RTX 3060 12 ГБ составляло около 7,7 ГБ. После аварийной перезагрузки JIT сначала загрузил модель с контекстом `8192`; явная команда `lms load ... --context-length 248064` вернула проверенную конфигурацию, после чего Chat, Responses, SSE и tools снова прошли.
-
-При двух одновременно загруженных экземплярах LM Studio Ollama `gemma4` падала из-за нехватки GPU-ресурсов. После выгрузки моделей LM Studio прямой запрос, LiteLLM и Codex прошли успешно.
-
-## Рекомендованные текстовые модели
-
-| Идентификатор модели | Задержка chat | Вызов инструментов |
-| --- | ---: | --- |
-| `nvidia/nemotron-3-super-120b-a12b` | 0,62 с | успешно |
-| `openai/gpt-oss-20b` | 0,57 с | успешно |
-| `meta/llama-3.1-8b-instruct` | 0,53 с | не проверялось |
-
-## Доступны, но чувствительны к загрузке
-
-| Идентификатор модели | Наблюдение |
-| --- | --- |
-| `deepseek-ai/deepseek-v4-flash` | chat сработал за 4,48 с; последующая проверка tools получила 503 `ResourceExhausted` |
-| `nvidia/nemotron-3-ultra-550b-a55b` | chat сработал за 0,76 с; последующая проверка tools получила 503 |
-| `mistralai/mistral-nemotron` | 27 июля не ответила за 20 секунд; удалена из автоматических алиасов |
-| `stepfun-ai/step-3.7-flash` | 27 июля не ответила за 20 секунд; удалена из автоматических алиасов |
-| `minimaxai/minimax-m3` | 27 июля не ответила за 30 секунд; удалена из автоматических алиасов |
-| `openai/gpt-oss-120b` | обычный chat прошёл, но tool/reasoning проверки зависали; оставлена только точным маршрутом |
-| `meta/llama-3.3-70b-instruct` | ответ за 11,72 с |
-| `poolside/laguna-xs-2.1` | ответ за 7,69 с |
-
-Эти модели опубликованы как точные маршруты, но не входят в основные автоматические алиасы.
-
-## Мультимодальные модели
-
-| Модель или алиас | Проверка | Результат |
+| NVIDIA ID | Chat | Tools |
 | --- | --- | --- |
-| `meta/llama-3.2-11b-vision-instruct` | OCR изображения | точный текст, 0,74 с |
-| `nvidia/nemotron-nano-12b-v2-vl` | OCR изображения | точный текст, 1,54 с |
-| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | OCR изображения | точный текст, 0,93 с |
-| `nim/omni` | анализ MP4 через LiteLLM | успешно, 2,74 с |
-| `nim/omni` | анализ WAV через LiteLLM | успешно, 2,81 с |
-| `nvidia/nemotron-parse` | структурированный OCR | корректный текст и bbox через `markdown_bbox` |
-| `nvidia/nemoretriever-parse` | структурированный OCR | корректный текст и bbox через `markdown_bbox` |
+| `deepseek-ai/deepseek-v4.1-flash` | таймаут 40 с | не запускалось |
+| `google/gemma-4-31b-it` | таймаут 40 с | не запускалось |
+| `moonshotai/kimi-k2.6` | HTTP 404 | не запускалось |
+| `moonshotai/kimi-k3` | таймаут 40 с | не запускалось |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | успешно, 1.17 с | HTTP 503 |
+| `nvidia/nemotron-3-super-120b-a12b` | успешно, 1.05 с | HTTP 500 |
+| `nvidia/nemotron-3-ultra-550b-a55b` | успешно, 3.70 с | успешно, 4.82 с |
+| `nvidia/nemotron-3.5-lightning-30b-a3b` | успешно, 5.87 с | успешно, 1.65 с |
+| `nvidia/nemotron-4-340b-instruct` | HTTP 404 | не запускалось |
+| `nvidia/nemotron-nano-3-30b-a3b` | HTTP 404 | не запускалось |
+| `openai/gpt-oss-20b` | успешно, 1.58 с | успешно, 0.92 с |
+| `poolside/laguna-xs-2.1` | таймаут 40 с | не запускалось |
+| `writer/palmyra-creative-122b` | HTTP 404 | не запускалось |
+| `z-ai/glm-5.3` | таймаут 40 с | не запускалось |
+| `z-ai/glm-5.3-flash` | успешно, 33.78 с | успешно, 49.79 с |
 
-Модели Nemotron Parse должны получать только изображение. Добавление текстовой части приводит к HTTP 400.
+В `nim/agent` и `nim/code` включены `openai/gpt-oss-20b`, `nvidia/nemotron-3.5-lightning-30b-a3b` и `nvidia/nemotron-3-ultra-550b-a55b`. Super сохранён для обычного chat, но исключён из агентных алиасов после ошибки tools. `z-ai/glm-5.3-flash` опубликован точным маршрутом: он прошёл проверки, но отвечал медленно.
 
-## Записи каталога, недоступные аккаунту
+### Удалённые NVIDIA маршруты
 
-Отключены провайдером после первоначальной проверки:
+Следующие 10 ID отсутствуют в текущем каталоге и удалены из конфигурации:
 
-- `qwen/qwen3-next-80b-a3b-instruct` — HTTP 410, завершение поддержки 27 июля 2026 года; удалена из маршрутов и алиасов.
-- `meta/llama-4-maverick-17b-128e-instruct` — HTTP 410, завершение поддержки 27 июля 2026 года; удалена из маршрутов и алиасов.
-- `mistralai/mistral-small-4-119b-2603` — HTTP 410, завершение поддержки 27 июля 2026 года; удалена из маршрутов и алиасов.
-- `upstage/solar-10.7b-instruct` — HTTP 410, завершение поддержки 27 июля 2026 года; удалена из маршрутов и алиасов.
-- `minimaxai/minimax-m2.7` — отсутствует в актуальном `/v1/models`; удалена из конфига.
+- `deepseek-ai/deepseek-v4-flash`
+- `meta/llama-3.1-8b-instruct`
+- `minimaxai/minimax-m3`
+- `mistralai/mistral-nemotron`
+- `nvidia/nemoretriever-parse`
+- `nvidia/nemotron-3-nano-30b-a3b`
+- `nvidia/nemotron-nano-12b-v2-vl`
+- `nvidia/nvidia-nemotron-nano-9b-v2`
+- `openai/gpt-oss-120b`
+- `stepfun-ai/step-3.7-flash`
 
-Немедленный HTTP 404 или `model not found`:
+### Изображения, OCR и embeddings
 
-- `01-ai/yi-large`
-- `ai21labs/jamba-1.5-large-instruct`
-- `google/gemma-3-4b-it`
-- `microsoft/phi-3.5-moe-instruct`
-- `mistralai/mistral-large`
-- `moonshotai/kimi-k2.6`
-- `nv-mistralai/mistral-nemo-12b-instruct`
-- `qwen/qwen3.5-397b-a17b`
-- `bigcode/starcoder2-15b`
-- `deepseek-ai/deepseek-coder-6.7b-instruct`
-- `ibm/granite-34b-code-instruct`
-- `mistralai/codestral-22b-instruct-v0.1`
-- `zyphra/zamba2-7b-instruct`
-- `nvidia/cosmos-reason2-8b`
+| NVIDIA ID | Проверка | Результат |
+| --- | --- | --- |
+| `meta/llama-3.2-11b-vision-instruct` | image | успешно, 0.81 с |
+| `nvidia/nemotron-parse` | structured | успешно, 1.91 с |
+| `nvidia/nemotron-parse-2.0` | structured | HTTP 500 |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | video | HTTP 503 |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | audio | HTTP 503 |
+| `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning` | image | успешно, 7.01 с |
 
-Не получен ответ за 30 секунд:
+Nemotron Parse получает только изображение без текстового блока; endpoint возвращает структурированный OCR. Parse 2.0 не включён после HTTP 500. Видео и аудио Omni вернули HTTP 503; маршрут сохранён для совместимости, успешность этих режимов сейчас не подтверждена. Генерация изображений/видео и специализированные ASR/TTS маршруты не добавлены.
 
-- `bytedance/seed-oss-36b-instruct`
-- `deepseek-ai/deepseek-v4-pro`
-- `google/gemma-4-31b-it`
-- `mistralai/ministral-14b-instruct-2512`
-- `mistralai/mistral-medium-3.5-128b`
-- `nvidia/llama-3.1-nemotron-nano-8b-v1`
-- `z-ai/glm-5.2`
+| Провайдер | Embeddings ID | Результат | Размерность |
+| --- | --- | --- | ---: |
+| nvidia | `nvidia/nemotron-3-embed-1b` | успешно, 0.44 с | 2048 |
+| cloudru | `BAAI/bge-m3` | успешно, 0.41 с | 1024 |
 
-Точные маршруты прежнего рабочего конфига сохранены для совместимости, даже если модель была нестабильна во время повторной проверки.
+## Cloud.ru
 
-## Генерация изображений, видео и работа со звуком
+Используются **только ранее полученные результаты**. После согласованного ограничения дополнительные запросы к Cloud.ru не выполняются. Было 13 chat-попыток, 11 tools-запросов и один embeddings-запрос. Таймаут клиента не гарантирует отсутствие тарификации на стороне провайдера.
 
-В доступном OpenAI-совместимом каталоге отсутствуют text-to-image и text-to-video модели. `google/diffusiongemma-26b-a4b-it` — текстовая diffusion-LLM, а не генератор изображений.
+| Cloud.ru ID | Chat | Tools |
+| --- | --- | --- |
+| `MiniMaxAI/MiniMax-M3` | таймаут 40 с | не запускалось |
+| `Qwen/Qwen3-Coder-Next` | успешно, 0.49 с | успешно, 0.58 с |
+| `Qwen/Qwen3.6-35B-A3B` | HTTP 200, только reasoning (лимит токенов) | успешно, 1.10 с |
+| `ai-sage/GigaChat3-10B-A1.8B` | успешно, 0.46 с | успешно, 0.32 с |
+| `ai-sage/GigaChat3.5-432B-A28B` | успешно, 1.05 с | успешно, 1.33 с |
+| `deepseek-ai/DeepSeek-V4-Flash` | успешно, 1.62 с | успешно, 1.83 с |
+| `deepseek-ai/DeepSeek-V4-Pro` | успешно, 1.21 с | успешно, 2.52 с |
+| `deepseek-ai/DeepSeek-V4.1-Flash` | успешно, 1.15 с | успешно, 1.13 с |
+| `moonshotai/Kimi-K2.6` | успешно, 2.48 с | успешно, 3.86 с |
+| `xiaomi/mimo-v2.5` | успешно, 6.99 с | успешно, 6.01 с |
+| `zai-org/GLM-4.7` | таймаут 40 с | не запускалось |
+| `zai-org/GLM-5.1` | успешно, 16.48 с | успешно, 5.08 с |
+| `zai-org/GLM-5.2` | успешно, 5.93 с | успешно, 5.79 с |
 
-Отдельных ASR и TTS моделей в `/v1/models` также нет. Аудио-вход доступен через `nvidia/nemotron-3-nano-omni-30b-a3b-reasoning`, но это мультимодальное понимание, а не специализированный speech-to-text или text-to-speech сервис.
+В YAML добавлены 11 ответивших текстовых моделей и MiniMax M3 для совместимости старых клиентов. GLM 4.7 после таймаута не добавлен. Для Qwen3.6 успешный transport не означает завершённый текстовый ответ: при 128 токенах он вернул только рассуждение.
+
+Новые точные маршруты имеют префикс `cloudru/`, например `cloudru/zai-org/GLM-5.2`. Старые ID без префикса сохранены для шести моделей: GigaChat3.5, GigaChat3, GLM-5.1, DeepSeek-V4-Pro, MiniMax-M3, Kimi-K2.6. Они всегда используют Cloud.ru. Облачные ключи берутся только из окружения; контекстные лимиты и capability-флаги взяты из каталога Cloud.ru, а не из ключей аккаунта.
+
+Cloud.ru отсутствует в автоматических NVIDIA-алиасах и fallback-списках. Повторные inference-запросы шлюза отключены. Responses history hook проверяется офлайн с реальным преобразователем LiteLLM 1.93.0; новые живые проверки Responses/SSE Cloud.ru не выполнялись.
+
+## Локальные модели
+
+На хосте обнаружены Ollama `gemma4:12b` и `qwen3.5:9b-q8_0`. Прежнее `gemma4:latest` отсутствует; пример окружения исправлен на `ollama_chat/gemma4:12b`.
+
+LM Studio на порту 1234 не работает; текущие Chat/Responses/tools для неё не проверены. Инструкции по Granite в LOCAL_MODELS_RU.md относятся к конфигурации, проверенной в июле, и не подтверждают наличие модели сейчас. Модель Qwen3.5 обнаружена в каталоге Ollama, но её inference отдельно не запускался.
+
+## Проверка собранного шлюза
+
+Изолированный контейнер LiteLLM 1.93.0 запущен с новым конфигом на временном loopback-порту, без PostgreSQL и с отключённым Cloud.ru upstream. Рабочая база и контейнер не использовались. Результаты: [catalogs/gateway-checks.json](catalogs/gateway-checks.json).
+
+- Конфигурация всех маршрутов, включая Cloud.ru, успешно загружена; каталог Ollama обнаруживает обе установленные модели.
+- NVIDIA `openai/gpt-oss-20b`: Responses API с `client_metadata`, SSE с завершённым текстом и Responses tools — успешно.
+- NVIDIA `nim/embeddings`: 2048 измерений — успешно.
+- Ollama `local/ollama` → `gemma4:12b`: Chat, Responses и tools — успешно.
+- Регрессии Cloud.ru Responses history выполнены в Docker без сети; live inference Cloud.ru при этой проверке не запускался.
+
+Скрипты проверяют непустой конечный текст; один только reasoning не считается успешным текстовым ответом. Статическая проверка сверяет NVIDIA/Cloud.ru IDs со снимками каталога, исключает embedding-модели из Chat и проверяет tools для агентных алиасов. GitHub Actions выполняет только офлайн-проверки.

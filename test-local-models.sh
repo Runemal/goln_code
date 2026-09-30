@@ -122,7 +122,7 @@ for model in "${MODELS[@]}"; do
     -H "Content-Type: application/json" \
     -d "$payload")
   curl_status=$?
-  if [[ $curl_status -eq 0 ]] && jq -e '.choices[0].message' >/dev/null 2>&1 <<<"$body"; then
+  if [[ $curl_status -eq 0 ]] && jq -e '(.choices[0].message.content // "") | type == "string" and length > 0' >/dev/null 2>&1 <<<"$body"; then
     chat_status=OK
   else
     failures=$((failures + 1))
@@ -140,7 +140,10 @@ for model in "${MODELS[@]}"; do
     -H "Content-Type: application/json" \
     -d "$payload")
   curl_status=$?
-  if [[ $curl_status -eq 0 ]] && jq -e '.status == "completed"' >/dev/null 2>&1 <<<"$body"; then
+  if [[ $curl_status -eq 0 ]] && jq -e '
+    .status == "completed" and
+    any(.output[]?; .type == "message" and any(.content[]?; .type == "output_text" and (.text | length > 0)))
+  ' >/dev/null 2>&1 <<<"$body"; then
     responses_status=OK
   else
     failures=$((failures + 1))

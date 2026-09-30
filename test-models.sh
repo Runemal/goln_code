@@ -56,7 +56,7 @@ for model in "${MODELS[@]}"; do
   payload=$(jq -nc --arg model "$model" '{
     model: $model,
     messages: [{role: "user", content: "Ответь ровно одним словом: OK"}],
-    max_tokens: 16,
+    max_tokens: 256,
     temperature: 0,
     stream: false
   }')
@@ -74,7 +74,7 @@ for model in "${MODELS[@]}"; do
   http_status=${meta%%$'\t'*}
   elapsed=${meta#*$'\t'}
 
-  if [[ $curl_status -eq 0 && $http_status == "200" ]] && jq -e '.choices[0]' >/dev/null 2>&1 <<<"$body"; then
+  if [[ $curl_status -eq 0 && $http_status == "200" ]] && jq -e '(.choices[0].message.content // "") | type == "string" and length > 0' >/dev/null 2>&1 <<<"$body"; then
     content=$(jq -r '.choices[0].message.content // .choices[0].message.reasoning_content // ""' <<<"$body" \
       | tr '\n' ' ' \
       | cut -c1-70)
@@ -106,7 +106,7 @@ for model in "${TOOL_MODELS[@]}"; do
       }
     }],
     tool_choice: "auto",
-    max_tokens: 128,
+    max_tokens: 1024,
     temperature: 0,
     stream: false
   }')

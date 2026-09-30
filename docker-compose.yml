@@ -17,7 +17,7 @@ services:
       retries: 10
 
   litellm:
-    image: ${LITELLM_IMAGE:-ghcr.io/berriai/litellm-database:main-stable}
+    image: ${LITELLM_IMAGE:-ghcr.io/berriai/litellm-database@sha256:72360d8bd5602faa49be5098a8ac3dd069d9fb74503d6bd014242d96dc753e43}
     init: true
     restart: unless-stopped
     depends_on:
@@ -29,13 +29,17 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./litellm_config.yaml:/app/config.yaml:ro
+      - ./cloudru_compat.py:/app/cloudru_compat.py:ro
     environment:
       # Заглушка позволяет поднять локальный-only стек без NVIDIA-аккаунта.
       # NVIDIA-маршруты требуют настоящий nvapi-ключ.
       NVIDIA_NIM_API_KEY: ${NVIDIA_NIM_API_KEY:-nvapi-not-configured}
+      NVIDIA_NIM_API_BASE: ${NVIDIA_NIM_API_BASE:-https://integrate.api.nvidia.com/v1}
+      CLOUDRU_API_BASE: ${CLOUDRU_API_BASE:-https://foundation-models.api.cloud.ru/v1}
+      CLOUDRU_API_KEY: ${CLOUDRU_API_KEY:-not-configured}
       LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:?Укажите LITELLM_MASTER_KEY в .env}
       DATABASE_URL: postgresql://litellm:${POSTGRES_PASSWORD}@db:5432/litellm
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-ollama_chat/gemma4:latest}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-ollama_chat/gemma4:12b}
       OLLAMA_API_BASE: ${OLLAMA_API_BASE:-http://host.docker.internal:11434}
       LM_STUDIO_MODEL: ${LM_STUDIO_MODEL:-openai/replace-with-loaded-model-id}
       LM_STUDIO_API_BASE: ${LM_STUDIO_API_BASE:-http://host.docker.internal:1234/v1}

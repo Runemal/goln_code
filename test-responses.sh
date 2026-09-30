@@ -50,7 +50,10 @@ body=${response%$'\n'__META__*}
 http_status=${meta%%$'\t'*}
 elapsed=${meta#*$'\t'}
 
-if [[ $curl_status -eq 0 && $http_status == 200 ]] && jq -e '.id and .status == "completed"' >/dev/null 2>&1 <<<"$body"; then
+if [[ $curl_status -eq 0 && $http_status == 200 ]] && jq -e '
+  .id and .status == "completed" and
+  any(.output[]?; .type == "message" and any(.content[]?; .type == "output_text" and (.text | length > 0)))
+' >/dev/null 2>&1 <<<"$body"; then
   echo "Responses API: OK (${elapsed} с)"
 else
   error=$(jq -r '.error.message // .detail // "ошибка запроса"' <<<"$body" 2>/dev/null || echo "ошибка запроса")
@@ -79,7 +82,12 @@ stream_body=${stream_response%$'\n'__META__*}
 http_status=${meta%%$'\t'*}
 elapsed=${meta#*$'\t'}
 
-if [[ $curl_status -eq 0 && $http_status == 200 ]] && grep -q 'response.completed' <<<"$stream_body"; then
+if [[ $curl_status -eq 0 && $http_status == 200 ]] && \
+  sed -n 's/^data: //p' <<<"$stream_body" | sed '/^\[DONE\]$/d' | jq -se '
+    any(.[]; .type == "response.completed" and .response.status == "completed" and
+      any(.response.output[]?; .type == "message" and any(.content[]?; .type == "output_text" and (.text | length > 0))))
+    and all(.[]; .type != "error" and .type != "response.failed")
+  ' >/dev/null 2>&1; then
   echo "Responses SSE: OK (${elapsed} с)"
 else
   echo "Responses SSE: FAIL (HTTP $http_status)" >&2

@@ -1,191 +1,93 @@
-# LiteLLM gateway для NVIDIA NIM, Ollama и LM Studio
+# LiteLLM gateway: NVIDIA NIM, Cloud.ru, Ollama и LM Studio
 
-Переносимый комплект для единого OpenAI-совместимого прокси: LiteLLM, PostgreSQL, NVIDIA NIM и локальные модели на Docker-хосте. Проверены Chat Completions, Responses API Codex, streaming и function calling.
+Переносимый OpenAI-совместимый прокси на LiteLLM 1.93.0 и PostgreSQL. Каталоги и результаты проверок обновлены **30 сентября 2026 года**. Текущий статус и ограничения: [MODEL_STATUS.md](MODEL_STATUS.md).
 
-## Что входит в комплект
+## Маршруты
 
-- `docker-compose.yml` — LiteLLM и PostgreSQL;
-- `litellm_config.yaml` — точные NVIDIA model id, стабильные алиасы и динамические локальные каталоги;
-- `.env.example` — шаблон переменных окружения без секретов;
-- `test-models.sh` — проверка текста, алиасов и function calling;
-- `test-responses.sh` — регрессия Codex Responses API, SSE и `client_metadata`;
-- `test-local-models.sh` — проверка каталогов, Chat Completions, Responses API и tools для Ollama/LM Studio;
-- `test-multimodal.sh` — проверка изображений, OCR, видео и аудио;
-- `validate-repo.sh` — статическая проверка конфигов перед публикацией;
-- `CURL_EXAMPLES.md` — готовые curl-команды;
-- `MODEL_STATUS.md` — результаты проверки каталога NVIDIA.
-- `CLIENTS_RU.md` — подключение Codex, Claude Code и OpenCode;
-- `LOCAL_MODELS_RU.md` — Ollama и LM Studio через тот же LiteLLM;
-- `DEPLOYMENT_RU.md` — развёртывание каталога на чистой системе;
-- `client-configs/` — готовые шаблоны конфигурации клиентов без секретов.
-
-## Провайдеры и алиасы
-
-| Маршрут | Источник |
+| Маршрут | Провайдер и назначение |
 | --- | --- |
-| `local/ollama` | модель `OLLAMA_MODEL` на Docker-хосте |
-| `local/lmstudio` | модель `LM_STUDIO_MODEL` на Docker-хосте |
-| `ollama/*` | любая модель из живого `/api/tags` Ollama |
-| `lmstudio/*` | любая модель из живого `/v1/models` LM Studio |
-| `nim/*` | NVIDIA NIM API |
+| Точный NVIDIA ID, например `openai/gpt-oss-20b` | NVIDIA NIM |
+| `nim/fast`, `nim/chat` | NVIDIA: быстрый ответ и диалог |
+| `nim/agent`, `nim/code` | NVIDIA: модели с успешно проверенными tools |
+| `nim/reasoning` | NVIDIA Nemotron Ultra |
+| `nim/vision`, `nim/ocr` | NVIDIA: изображения и обычный OCR |
+| `nim/ocr-structured` | NVIDIA Nemotron Parse: изображение без текстовой части |
+| `nim/omni` | NVIDIA Omni; видео и аудио в текущей проверке вернули 503 |
+| `nim/embeddings` | NVIDIA Nemotron 3 Embed, `/v1/embeddings` |
+| `cloudru/<ID>` | Cloud.ru, только явно выбранная модель |
+| `cloudru/BAAI/bge-m3` | Cloud.ru embeddings, платный запрос |
+| `local/ollama`, `local/lmstudio` | Модель из переменных `OLLAMA_MODEL` / `LM_STUDIO_MODEL` |
+| `ollama/*`, `lmstudio/*` | Динамический каталог локального провайдера |
 
-Стабильные `local/*` алиасы предназначены для заранее проверенных профилей Codex. Wildcard-маршруты позволяют обращаться к конкретной модели, например `ollama/gemma4:latest` или `lmstudio/granite-4.0-h-tiny`, без добавления каждой записи в YAML.
+Например, `cloudru/Qwen/Qwen3-Coder-Next` направляется в Cloud.ru, а `ollama/gemma4:12b` — в локальную Ollama. Шесть старых точных Cloud.ru ID сохранены для совместимости существующих клиентов; полный список есть в [MODEL_STATUS.md](MODEL_STATUS.md).
 
-Удобные NVIDIA-алиасы:
+Cloud.ru не входит в алиасы `nim/*` и не используется как запасной провайдер. Автоматические повторы на шлюзе отключены (`num_retries: 0`), чтобы ошибка не запускала дополнительный inference-запрос. Клиентские повторы настраиваются отдельно.
 
-| Алиас | Назначение |
-| --- | --- |
-| `nim/fast` | быстрые универсальные запросы |
-| `nim/chat` | обычный диалог |
-| `nim/agent` | агенты и вызов инструментов |
-| `nim/code` | программирование и вызов инструментов |
-| `nim/reasoning` | сложные задачи с рассуждением |
-| `nim/vision` | понимание изображений |
-| `nim/ocr` | OCR с обычным текстовым ответом |
-| `nim/ocr-structured` | OCR с координатами блоков через `markdown_bbox` |
-| `nim/omni` | изображения, видео, аудио и текст |
+NVIDIA-алиас содержит один или несколько deployments; маршрутизатор выбирает одну модель по измеренной задержке. Полные каталоги находятся в [catalogs/](catalogs/): 81 NVIDIA ID и 95 Cloud.ru ID. Наличие ID в каталоге не подтверждает доступность inference; в YAML включено проверенное подмножество и совместимые старые Cloud.ru маршруты.
 
-Внутри алиаса находится несколько проверенных NVIDIA deployments. LiteLLM выбирает один deployment по измеренной задержке. Запрос не рассылается всем моделям одновременно.
+## Настройка
 
-При временной ошибке применяется одна повторная попытка. После двух ошибок deployment исключается из маршрутизации на 60 секунд.
-
-## Требования
-
-- Docker и Docker Compose;
-- `curl` и `jq` для обычной проверки;
-- Python 3.11+ для `validate-repo.sh`;
-- `ImageMagick` и `ffmpeg` для мультимодальной проверки.
-
-Ollama и LM Studio устанавливаются на Docker-хост отдельно и нужны только для соответствующих локальных маршрутов.
-
-## Настройка и запуск
+Нужны Docker и Compose v2. Для проверок: `curl`, `jq`, Python 3.11+ и PyYAML (`python3 -m pip install PyYAML==6.0.3`). Для мультимодальных тестов дополнительно нужны ImageMagick и ffmpeg. Локальные серверы устанавливаются отдельно.
 
 ```bash
 cp .env.example .env
 chmod 600 .env
 ```
 
-Заполните в `.env`:
+Замените `LITELLM_MASTER_KEY` и `POSTGRES_PASSWORD`. Для NVIDIA заполните `NVIDIA_NIM_API_KEY`, для Cloud.ru — `CLOUDRU_API_KEY`; неиспользуемые облачные ключи можно оставить заглушками. Укажите реально установленную модель Ollama и/или загруженную модель LM Studio. На проверенном хосте установлены `gemma4:12b` и `qwen3.5:9b-q8_0`, а LM Studio сейчас выключена.
 
-```dotenv
-NVIDIA_NIM_API_KEY=nvapi-...
-LITELLM_MASTER_KEY=sk-...
-POSTGRES_PASSWORD=длинный-url-безопасный-пароль
-LITELLM_PORT=4001
-```
-
-Если нужны только локальные модели, `NVIDIA_NIM_API_KEY` можно оставить заглушкой. Для Ollama и LM Studio обязательно замените model ID и настройте доступ с Docker-хоста по инструкции [LOCAL_MODELS_RU.md](LOCAL_MODELS_RU.md).
-
-Запустите стек:
+`NVIDIA_NIM_API_BASE` и `CLOUDRU_API_BASE` задают upstream URL. По умолчанию это публичные API провайдеров. На проверенном хосте прямой NVIDIA API отвечает HTTP 451; успешные NVIDIA-проверки выполнены через временный SSH-туннель с разрешённого сервера. Туннель не входит в комплект. До запуска облачных маршрутов проверьте доступность API из вашей сети.
 
 ```bash
+./validate-repo.sh
 docker compose up -d
 docker compose ps
 ```
 
-В `.env.example` закреплён digest образа LiteLLM 1.93.0, на котором выполнены проверки. Обновляйте `LITELLM_IMAGE` только вместе с повторным запуском smoke-тестов.
+Образ LiteLLM закреплён по digest в Compose и `.env.example`; это версия 1.93.0. Первый запуск инициализирует базу PostgreSQL. API по умолчанию слушает `http://127.0.0.1:4001/v1`, UI — `http://127.0.0.1:4001/ui/`. Вход в UI: `admin` и значение `LITELLM_MASTER_KEY`.
 
-Первый запуск может занять несколько минут: LiteLLM создаёт схему PostgreSQL.
+## Проверки
 
-## Адреса
-
-- API: `http://127.0.0.1:4001/v1`
-- Web UI: `http://127.0.0.1:4001/ui/`
-- Пользователь UI: `admin`
-- Пароль UI: значение `LITELLM_MASTER_KEY`
-
-Порт меняется переменной `LITELLM_PORT`.
-
-## Проверка
-
-Текстовые алиасы и вызов инструментов:
-
-```bash
-./test-models.sh
-```
-
-Совместимость с Codex Responses API:
-
-```bash
-./test-responses.sh
-```
-
-Локальные маршруты:
-
-```bash
-./test-local-models.sh
-./test-local-models.sh local/ollama
-./test-local-models.sh local/lmstudio
-./test-local-models.sh --catalog
-```
-
-Изображения, OCR, видео и аудио:
-
-```bash
-./test-multimodal.sh
-```
-
-Все smoke-тесты возвращают ненулевой код завершения, если хотя бы одна проверка не пройдена.
-
-Статическая проверка перед коммитом:
+Статическая проверка и регрессии совместимости не обращаются к моделям:
 
 ```bash
 ./validate-repo.sh
+./test-offline.sh
 ```
 
-## Пример запроса
+`test-offline.sh` запускает проверки преобразования Responses/tool history в закреплённом образе Docker без сети и без чтения `.env`. GitHub Actions выполняет только эти проверки и не получает runtime-ключи.
+
+Следующие smoke-тесты вызывают выбранные модели. По умолчанию облачные скрипты используют NVIDIA; они не запускают обход Cloud.ru. Не подставляйте Cloud.ru ID в `CODEX_TEST_MODEL` без согласования расходов.
 
 ```bash
-curl http://127.0.0.1:4001/v1/chat/completions \
-  -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "nim/fast",
-    "messages": [
-      {"role": "user", "content": "Кратко объясни назначение NVIDIA NIM."}
-    ],
-    "max_tokens": 256
-  }' | jq
+./test-models.sh
+./test-responses.sh
+./test-local-models.sh --catalog ollama
+./test-local-models.sh local/ollama
+./test-multimodal.sh
+# Необязательная проверка нестабильных видео/аудио NVIDIA:
+TEST_OMNI_MEDIA=1 ./test-multimodal.sh
 ```
 
-Больше примеров: [CURL_EXAMPLES.md](CURL_EXAMPLES.md).
+Каталог локальных моделей можно проверить без загрузки каждой модели. Полные локальные тесты запускайте только для установленного и работающего провайдера. Скрипты возвращают ненулевой код при провале проверки.
 
-Подключение агентных клиентов: [CLIENTS_RU.md](CLIENTS_RU.md).
+## Клиенты и перенос
 
-Подключение Ollama и LM Studio: [LOCAL_MODELS_RU.md](LOCAL_MODELS_RU.md).
+- [CLIENTS_RU.md](CLIENTS_RU.md) — Codex, Claude Code и OpenCode;
+- [CURL_EXAMPLES.md](CURL_EXAMPLES.md) — примеры Chat, Responses, tools и медиа;
+- [LOCAL_MODELS_RU.md](LOCAL_MODELS_RU.md) — Ollama и LM Studio;
+- [DEPLOYMENT_RU.md](DEPLOYMENT_RU.md) — развёртывание на другом хосте;
+- [client-configs/](client-configs/) — шаблоны без секретов.
 
-Развёртывание копии каталога на другой машине: [DEPLOYMENT_RU.md](DEPLOYMENT_RU.md).
+`cloudru_compat.py` исправляет порядок assistant text/reasoning и tool calls в историях Codex при преобразовании Responses в Chat Completions. Он сохраняет содержимое, идентификаторы и результаты инструментов, не перемещая их через границы пользовательских сообщений. Hook применяется только к маршрутам Cloud.ru.
 
-## Мультимодальные возможности
+## Обновление и безопасность
 
-Через `/v1/chat/completions` проверены:
-
-- распознавание и описание изображений;
-- обычный и структурированный OCR;
-- анализ видео;
-- понимание аудио.
-
-В доступном текущему NVIDIA-аккаунту каталоге нет отдельных text-to-image, text-to-video, ASR и TTS endpoints. Они намеренно не добавлены в конфиг как несуществующие маршруты.
-
-## Обновление и управление
+После изменения `.env` пересоздайте только сервис шлюза:
 
 ```bash
-docker compose pull litellm
 docker compose up -d --force-recreate litellm
-docker compose logs -f litellm
-docker compose restart litellm
-docker compose down
+docker compose logs --tail=100 litellm
 ```
 
-`docker compose down` сохраняет PostgreSQL volume. Команда `docker compose down -v` удаляет сохранённые данные.
-
-После изменения `.env` используйте `docker compose up -d --force-recreate litellm`: обычный `restart` не перечитывает переменные окружения.
-
-## Безопасность
-
-- Не добавляйте `.env` в Git.
-- Не храните NVIDIA API key в YAML или shell-скриптах.
-- Используйте мастер-ключ LiteLLM, начинающийся с `sk-`.
-- Для внешнего доступа разместите перед LiteLLM HTTPS reverse proxy.
-- Порты Ollama и LM Studio, открытые на `0.0.0.0`, ограничьте firewall. Если LM Studio доступна по недоверенной сети, включите API token.
-- Не включайте удалённые MCP-функции LM Studio, если они не нужны: Codex передаёт инструменты через LiteLLM независимо от встроенного MCP LM Studio.
+`docker compose down` сохраняет PostgreSQL volume; `down -v` удаляет данные. Ключи хранятся в `.env` или внешнем окружении. YAML и клиентские шаблоны содержат только ссылки на переменные. `.env`, приватные регистрационные файлы, логи и резервные копии исключены из публикации. Для внешнего доступа используйте HTTPS reverse proxy и ограничьте доступ к портам локальных провайдеров.

@@ -11,12 +11,21 @@ if [[ -f "$ENV_FILE" ]]; then
   set +a
 fi
 
-for command_name in curl jq base64 magick ffmpeg; do
+for command_name in curl jq base64 ffmpeg; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     echo "Не найдена обязательная команда: $command_name" >&2
     exit 2
   fi
 done
+
+if command -v magick >/dev/null 2>&1; then
+  IMAGE_COMMAND=magick
+elif command -v convert >/dev/null 2>&1; then
+  IMAGE_COMMAND=convert
+else
+  echo "Не найден ImageMagick (magick или convert)" >&2
+  exit 2
+fi
 
 : "${LITELLM_MASTER_KEY:?Укажите LITELLM_MASTER_KEY или создайте $ENV_FILE}"
 
@@ -25,7 +34,7 @@ REQUEST_TIMEOUT="${REQUEST_TIMEOUT:-120}"
 TMP_DIR=$(mktemp -d /tmp/litellm-nim-media.XXXXXX)
 trap 'rm -rf -- "$TMP_DIR"' EXIT
 
-magick -size 900x320 xc:white -font DejaVu-Sans -pointsize 54 \
+"$IMAGE_COMMAND" -size 900x320 xc:white -font DejaVu-Sans -pointsize 54 \
   -fill black -gravity center \
   -annotate +0+0 $'INVOICE 42\nTOTAL: 123.45 USD' \
   "$TMP_DIR/ocr.png"
@@ -145,8 +154,11 @@ printf '%s\n' "-----------------------------------------------------------------
 request_media "nim/vision" image "$TMP_DIR/ocr.png" "Прочитай весь видимый текст."
 request_media "nim/ocr" image "$TMP_DIR/ocr.png" "Извлеки весь текст без изменений."
 request_media "nim/ocr-structured" image "$TMP_DIR/ocr.png" "__IMAGE_ONLY__"
+# Видео/аудио в последней проверке дали 503; запускаются только явно.
+if [[ ${TEST_OMNI_MEDIA:-0} == 1 ]]; then
 request_media "nim/omni" video "$TMP_DIR/video.mp4" "Опиши видео и прочитай видимый текст."
 request_media "nim/omni" audio "$TMP_DIR/audio.wav" "Опиши аудио: это речь, музыка или тон?"
+fi
 
 if [[ $failures -eq 0 ]]; then
   echo "Все мультимодальные проверки пройдены."

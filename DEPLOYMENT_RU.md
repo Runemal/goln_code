@@ -5,7 +5,7 @@
 ## 1. Скопировать проект
 
 ```bash
-git clone <адрес-репозитория> litellm-gateway
+git clone https://github.com/Runemal/goln_code.git litellm-gateway
 cd litellm-gateway
 ```
 
@@ -17,7 +17,7 @@ cd litellm-gateway
 
 - Docker Engine;
 - Docker Compose v2 (`docker compose`);
-- `curl`, `jq` и Python 3.11+ для проверок.
+- `curl`, `jq`, Python 3.11+ и PyYAML для проверок (`python3 -m pip install PyYAML==6.0.3`).
 
 Опционально:
 
@@ -42,12 +42,17 @@ POSTGRES_PASSWORD=длинный-url-безопасный-пароль
 
 Для NVIDIA NIM укажите настоящий `NVIDIA_NIM_API_KEY`. Если используются только локальные модели, можно оставить заглушку.
 
+Для Cloud.ru укажите `CLOUDRU_API_KEY`; маршруты `cloudru/<ID>` вызывают платный API только при явном выборе. Cloud.ru не участвует в автоматических NVIDIA-алиасах.
+
+Для NVIDIA HTTP 451 означает ограничение доступа из текущей сети. `NVIDIA_NIM_API_BASE` позволяет задать доступный совместимый upstream; сетевой обход не устанавливается этим проектом.
+
 Для локальных моделей замените `OLLAMA_MODEL` и `LM_STUDIO_MODEL` на ID, реально установленные на новой машине. Подробности: [LOCAL_MODELS_RU.md](LOCAL_MODELS_RU.md).
 
 ## 4. Статическая проверка
 
 ```bash
 ./validate-repo.sh
+./test-offline.sh
 ```
 
 Проверка не обращается к API моделей и не требует запущенного стека.
@@ -70,6 +75,8 @@ curl -fsS http://127.0.0.1:${LITELLM_PORT:-4001}/health/liveliness
 ```
 
 ## 6. Smoke-тесты
+
+Эти команды вызывают модели. Запускайте только нужные тесты; Cloud.ru автоматически не проверяется. Не задавайте Cloud.ru в `CODEX_TEST_MODEL` без согласования расходов.
 
 NVIDIA-текст и tools:
 

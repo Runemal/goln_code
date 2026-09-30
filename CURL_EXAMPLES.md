@@ -1,5 +1,7 @@
 # Примеры curl-запросов
 
+На 30 сентября видео и аудио `nim/omni` вернули HTTP 503. Примеры этих режимов ниже оставлены для ручной диагностики. Актуальная доступность: [MODEL_STATUS.md](MODEL_STATUS.md).
+
 Все команды используют OpenAI-совместимый адрес LiteLLM:
 
 ```bash
@@ -232,3 +234,25 @@ curl -fsS "$LITELLM_URL/v1/responses" \
     "max_output_tokens": 256
   }' | jq
 ```
+
+## Cloud.ru: явный выбор модели
+
+Ключ Cloud.ru нужен на стороне шлюза в `.env`, а клиент использует только мастер-ключ LiteLLM. Следующий запрос тарифицируется Cloud.ru:
+
+```bash
+curl -fsS http://127.0.0.1:4001/v1/chat/completions \
+  -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"cloudru/Qwen/Qwen3-Coder-Next","messages":[{"role":"user","content":"Привет"}],"max_tokens":128}'
+```
+
+## Embeddings NVIDIA
+
+```bash
+curl -fsS http://127.0.0.1:4001/v1/embeddings \
+  -H "Authorization: Bearer $LITELLM_MASTER_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"nim/embeddings","input":["Пример текста"],"input_type":"passage"}'
+```
+
+Для Cloud.ru embeddings явно выберите `cloudru/BAAI/bge-m3` и уберите `input_type`; такой запрос платный.

@@ -1,0 +1,511 @@
+[
+  {
+    "provider": "cloudru",
+    "model": "MiniMaxAI/MiniMax-M3",
+    "checked_at": "2026-09-30T10:24:09.105875+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.11,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "cloudru",
+    "model": "Qwen/Qwen3-Coder-Next",
+    "checked_at": "2026-09-30T10:24:05.249740+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 0.49,
+      "finish_reason": "stop",
+      "total_tokens": 17,
+      "text_nonempty": true,
+      "reasoning_nonempty": false,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 0.58,
+      "finish_reason": "tool_calls",
+      "total_tokens": 315,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "Qwen/Qwen3.6-35B-A3B",
+    "checked_at": "2026-09-30T10:24:06.444057+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.15,
+      "finish_reason": "length",
+      "total_tokens": 145,
+      "text_nonempty": false,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 1.1,
+      "finish_reason": "tool_calls",
+      "total_tokens": 406,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "ai-sage/GigaChat3-10B-A1.8B",
+    "checked_at": "2026-09-30T10:23:25.265669+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 0.46,
+      "finish_reason": "stop",
+      "total_tokens": 1000,
+      "text_nonempty": true,
+      "reasoning_nonempty": false,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 0.32,
+      "finish_reason": "tool_calls",
+      "total_tokens": 1067,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "ai-sage/GigaChat3.5-432B-A28B",
+    "checked_at": "2026-09-30T10:23:24.487397+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.05,
+      "finish_reason": "stop",
+      "total_tokens": 75,
+      "text_nonempty": true,
+      "reasoning_nonempty": false,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 1.33,
+      "finish_reason": "tool_calls",
+      "total_tokens": 146,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "deepseek-ai/DeepSeek-V4-Flash",
+    "checked_at": "2026-09-30T10:24:04.191015+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.62,
+      "finish_reason": "stop",
+      "total_tokens": 34,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 1.83,
+      "finish_reason": "tool_calls",
+      "total_tokens": 364,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "deepseek-ai/DeepSeek-V4-Pro",
+    "checked_at": "2026-09-30T10:23:28.997295+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.21,
+      "finish_reason": "stop",
+      "total_tokens": 13,
+      "text_nonempty": true,
+      "reasoning_nonempty": false,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 2.52,
+      "finish_reason": "tool_calls",
+      "total_tokens": 313,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+    "checked_at": "2026-09-30T10:24:00.738299+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.15,
+      "finish_reason": "stop",
+      "total_tokens": 55,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 1.13,
+      "finish_reason": "tool_calls",
+      "total_tokens": 373,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "moonshotai/Kimi-K2.6",
+    "checked_at": "2026-09-30T10:23:52.466994+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 2.48,
+      "finish_reason": "stop",
+      "total_tokens": 50,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 3.86,
+      "finish_reason": "tool_calls",
+      "total_tokens": 117,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "xiaomi/mimo-v2.5",
+    "checked_at": "2026-09-30T10:24:18.251839+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 6.99,
+      "finish_reason": "stop",
+      "total_tokens": 29,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 6.01,
+      "finish_reason": "tool_calls",
+      "total_tokens": 153,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "zai-org/GLM-4.7",
+    "checked_at": "2026-09-30T10:24:46.541508+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.1,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "cloudru",
+    "model": "zai-org/GLM-5.1",
+    "checked_at": "2026-09-30T10:23:46.125494+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 16.48,
+      "finish_reason": "stop",
+      "total_tokens": 83,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 5.08,
+      "finish_reason": "tool_calls",
+      "total_tokens": 191,
+      "ok": true
+    }
+  },
+  {
+    "provider": "cloudru",
+    "model": "zai-org/GLM-5.2",
+    "checked_at": "2026-09-30T10:24:04.180204+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 5.93,
+      "finish_reason": "stop",
+      "total_tokens": 91,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 5.79,
+      "finish_reason": "tool_calls",
+      "total_tokens": 199,
+      "ok": true
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "deepseek-ai/deepseek-v4.1-flash",
+    "checked_at": "2026-09-30T10:22:34.894406+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.03,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "google/gemma-4-31b-it",
+    "checked_at": "2026-09-30T10:23:22.105752+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.04,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "moonshotai/kimi-k2.6",
+    "checked_at": "2026-09-30T10:22:02.026317+00:00",
+    "chat": {
+      "http_status": 404,
+      "seconds": 0.38,
+      "error": "upstream_http_error",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "moonshotai/kimi-k3",
+    "checked_at": "2026-09-30T10:22:40.912433+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.04,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+    "checked_at": "2026-09-30T10:23:24.563996+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.17,
+      "finish_reason": "stop",
+      "total_tokens": 56,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 503,
+      "seconds": 1.62,
+      "error": "upstream_http_error",
+      "ok": false
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-super-120b-a12b",
+    "checked_at": "2026-09-30T10:21:53.845533+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.05,
+      "finish_reason": "stop",
+      "total_tokens": 89,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 500,
+      "seconds": 0.43,
+      "error": "upstream_http_error",
+      "ok": false
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3-ultra-550b-a55b",
+    "checked_at": "2026-09-30T10:22:00.872178+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 3.7,
+      "finish_reason": "stop",
+      "total_tokens": 39,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 4.82,
+      "finish_reason": "tool_calls",
+      "total_tokens": 342,
+      "ok": true
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "checked_at": "2026-09-30T10:22:01.648565+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 5.87,
+      "finish_reason": "stop",
+      "total_tokens": 136,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 1.65,
+      "finish_reason": "tool_calls",
+      "total_tokens": 329,
+      "ok": true
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-4-340b-instruct",
+    "checked_at": "2026-09-30T10:23:21.773535+00:00",
+    "chat": {
+      "http_status": 404,
+      "seconds": 0.42,
+      "error": "upstream_http_error",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "nvidia/nemotron-nano-3-30b-a3b",
+    "checked_at": "2026-09-30T10:21:54.123107+00:00",
+    "chat": {
+      "http_status": 404,
+      "seconds": 0.28,
+      "error": "upstream_http_error",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "openai/gpt-oss-20b",
+    "checked_at": "2026-09-30T10:21:54.862750+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 1.58,
+      "finish_reason": "stop",
+      "total_tokens": 103,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 0.92,
+      "finish_reason": "tool_calls",
+      "total_tokens": 168,
+      "ok": true
+    }
+  },
+  {
+    "provider": "nvidia",
+    "model": "poolside/laguna-xs-2.1",
+    "checked_at": "2026-09-30T10:23:20.916407+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.0,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "writer/palmyra-creative-122b",
+    "checked_at": "2026-09-30T10:23:21.351634+00:00",
+    "chat": {
+      "http_status": 404,
+      "seconds": 0.44,
+      "error": "upstream_http_error",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "z-ai/glm-5.3",
+    "checked_at": "2026-09-30T10:22:42.065735+00:00",
+    "chat": {
+      "http_status": null,
+      "seconds": 40.04,
+      "error": "TimeoutError",
+      "text_nonempty": false,
+      "reasoning_nonempty": false,
+      "ok": false
+    },
+    "tools": null
+  },
+  {
+    "provider": "nvidia",
+    "model": "z-ai/glm-5.3-flash",
+    "checked_at": "2026-09-30T10:23:58.462337+00:00",
+    "chat": {
+      "http_status": 200,
+      "seconds": 33.78,
+      "finish_reason": "stop",
+      "total_tokens": 53,
+      "text_nonempty": true,
+      "reasoning_nonempty": true,
+      "ok": true
+    },
+    "tools": {
+      "http_status": 200,
+      "seconds": 49.79,
+      "finish_reason": "tool_calls",
+      "total_tokens": 211,
+      "ok": true
+    }
+  }
+]
