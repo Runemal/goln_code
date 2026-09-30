@@ -33,13 +33,13 @@ Compose раскрывает `${YANDEX_FOLDER_ID}` из `.env`. При зада�
 
 `yandex_compat.py` добавляет `OpenAI-Project` из `YANDEX_FOLDER_ID` только для `yandex/*`, сохраняя другие заголовки. Неуказанный каталог останавливает запрос до upstream. Клиенту нужен только мастер-ключ LiteLLM, а API-ключ Яндекса хранится на сервере.
 
-NVIDIA-алиасы не переходят в Яндекс при ошибке. Автоматические повторные запросы и fallback отключены. Для Responses явно используется Chat bridge LiteLLM; это не проверка нативного Responses API Яндекса. Поддержку tools у конкретной модели подтверждайте отдельно.
+NVIDIA-алиасы не переходят в Яндекс при ошибке. Автоматические повторы маршрутизатора (`num_retries: 0`), SDK (`max_retries: 0`) и fallback отключены. Для embeddings также обнулён `DEFAULT_MAX_RETRIES`: в закреплённой версии SDK использует этот default при нулевом значении параметра. Ошибки HTTP 500 проверены офлайн: повторного upstream-запроса нет. Для Responses явно используется Chat bridge LiteLLM; это не проверка нативного Responses API Яндекса. Поддержку tools у конкретной модели подтверждайте отдельно.
 
 ## Каталог и проверки
 
 Снимок [catalogs/yandex-catalog.json](catalogs/yandex-catalog.json) содержит полный результат обнаружения с заменой ID каталога на `{folder_id}`. В нём есть текстовые, embedding и speech/realtime модели, включая версии `rc` и `deprecated`. Они не добавляются автоматически как Chat deployments.
 
-Начальные значения `.env.example` взяты из обнаруженного каталога. Наличие в каталоге не подтверждает inference, tools или качество ответа. Актуальные результаты: [MODEL_STATUS.md](MODEL_STATUS.md).
+Начальные значения `.env.example` взяты из обнаруженного каталога. Наличие в каталоге не подтверждает inference, tools или качество ответа. Живая проверка AliceAI LLM Flash: Chat, Responses, Responses SSE и tools прошли четырьмя согласованными запросами. Другие текстовые модели и embeddings не вызывались. Актуальные результаты: [MODEL_STATUS.md](MODEL_STATUS.md).
 
 Без расходов:
 

@@ -1,4 +1,4 @@
-# Catalogues: 2026-09-30. Explicit provider routes; no automatic paid fallback.
+# Explicit provider routes; automatic router and SDK retries disabled.
 model_list:
 - model_name: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
   litellm_params:
@@ -462,6 +462,7 @@ model_list:
     api_base: os.environ/YANDEX_API_BASE
     timeout: 60
     use_chat_completions_api: true
+    max_retries: 0
   model_info:
     mode: chat
 - model_name: yandex/lite
@@ -471,6 +472,7 @@ model_list:
     api_base: os.environ/YANDEX_API_BASE
     timeout: 60
     use_chat_completions_api: true
+    max_retries: 0
   model_info:
     mode: chat
 - model_name: yandex/embeddings
@@ -479,6 +481,7 @@ model_list:
     api_key: os.environ/YANDEX_API_KEY
     api_base: os.environ/YANDEX_API_BASE
     timeout: 60
+    max_retries: 0
   model_info:
     mode: embedding
 - model_name: yandex/embeddings-query
@@ -487,6 +490,7 @@ model_list:
     api_key: os.environ/YANDEX_API_KEY
     api_base: os.environ/YANDEX_API_BASE
     timeout: 60
+    max_retries: 0
   model_info:
     mode: embedding
 litellm_settings:
@@ -496,11 +500,13 @@ litellm_settings:
   callbacks:
   - cloudru_compat.proxy_handler_instance
   - yandex_compat.proxy_handler_instance
+  DEFAULT_MAX_RETRIES: 0
 router_settings:
   routing_strategy: latency-based-routing
   default_litellm_params:
     additional_drop_params:
     - client_metadata
+    max_retries: 0
   num_retries: 0
   timeout: 60
   allowed_fails: 2

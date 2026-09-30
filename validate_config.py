@@ -41,6 +41,7 @@ def validate(config, catalogs, checks):
             assert model == 'os.environ/' + variable, f'Yandex URI must use environment: {name}'
             assert entry['model_info']['mode'] == mode, f'Wrong Yandex endpoint mode: {name}'
             assert params['api_base'] == 'os.environ/YANDEX_API_BASE'
+            assert params['max_retries'] == 0, f'Yandex SDK retries enabled: {name}'
             if mode == 'chat':
                 assert params.get('use_chat_completions_api') is True, f'Missing Yandex Responses bridge: {name}'
         if 'embed' in model.lower() or model.endswith('BAAI/bge-m3'):
@@ -48,6 +49,8 @@ def validate(config, catalogs, checks):
     names = {e['model_name'] for e in deployments}
     assert {'local/ollama', 'local/lmstudio', 'ollama/*', 'lmstudio/*', 'nim/embeddings'} <= names
     assert config['router_settings']['num_retries'] == 0, 'Automatic inference retries must be disabled'
+    assert config['router_settings']['default_litellm_params']['max_retries'] == 0, 'SDK retries must be disabled'
+    assert config['litellm_settings']['DEFAULT_MAX_RETRIES'] == 0, 'Embedding SDK retry default must be zero'
     assert not config['router_settings'].get('fallbacks'), 'Automatic cross-provider fallbacks are disabled'
     assert not config['router_settings'].get('default_fallbacks'), 'Default provider fallbacks are disabled'
     assert config['litellm_settings']['callbacks'] == [

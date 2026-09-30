@@ -23,6 +23,12 @@ class FakeYandex(BaseHTTPRequestHandler):
         self.server.calls.append({'path': self.path, 'body': body,
                                   'authorization': self.headers.get('Authorization'),
                                   'project': self.headers.get('OpenAI-Project')})
+        if self.server.fail:
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(b'{"error":{"message":"synthetic upstream failure","type":"server_error"}}')
+            return
         if self.path == '/v1/embeddings':
             result = {'object': 'list', 'model': body['model'], 'data': [
                 {'object': 'embedding', 'index': 0, 'embedding': [0.25, 0.5, 0.75]}],
@@ -68,6 +74,7 @@ class YandexGatewayTest(unittest.TestCase):
         cls.backend = ThreadingHTTPServer(('127.0.0.1', 0), FakeYandex)
         cls.backend.daemon_threads = True
         cls.backend.calls = []
+        cls.backend.fail = False
         threading.Thread(target=cls.backend.serve_forever, daemon=True).start()
         with socket.socket() as sock:
             sock.bind(('127.0.0.1', 0))
@@ -178,6 +185,25 @@ class YandexGatewayTest(unittest.TestCase):
             self.assertEqual(json.loads(raw)['data'][0]['embedding'], [0.25, 0.5, 0.75])
             self.assertEqual(call['path'], '/v1/embeddings')
             self.assertEqual(call['body']['model'], f'emb://test-folder/text-embeddings-v2-{suffix}/latest')
+
+    def check_error_without_retry(self, path, payload):
+        self.backend.calls.clear()
+        self.backend.fail = True
+        try:
+            req = urllib.request.Request(self.base + path, data=json.dumps(payload).encode(),
+                headers={'Authorization': 'Bearer sk-offline-gateway-test', 'Content-Type': 'application/json'})
+            with self.assertRaises(urllib.error.HTTPError):
+                urllib.request.urlopen(req, timeout=20)
+            self.assertEqual(len(self.backend.calls), 1, 'Upstream failures must not trigger SDK or router retries')
+        finally:
+            self.backend.fail = False
+
+    def test_z_chat_upstream_errors_are_not_retried(self):
+        self.check_error_without_retry('/v1/chat/completions', {'model': 'yandex/lite',
+            'messages': [{'role': 'user', 'content': 'synthetic'}], 'max_tokens': 16})
+
+    def test_z_embeddings_upstream_errors_are_not_retried(self):
+        self.check_error_without_retry('/v1/embeddings', {'model': 'yandex/embeddings-query', 'input': ['synthetic']})
 
 
 if __name__ == '__main__':
