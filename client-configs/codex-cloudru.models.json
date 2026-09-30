@@ -1,0 +1,148 @@
+{
+  "models": [
+    {
+      "slug": "ai-sage/GigaChat3-10B-A1.8B",
+      "display_name": "Cloud.ru · GigaChat3-10B-A1.8B",
+      "description": "Через LiteLLM. Прежние Chat/tools проверки прошли. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 0,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "MiniMaxAI/MiniMax-M3",
+      "display_name": "Cloud.ru · MiniMax-M3 — прежний таймаут",
+      "description": "Через LiteLLM. Прежняя chat-проверка завершилась таймаутом. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 1,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "ai-sage/GigaChat3.5-432B-A28B",
+      "display_name": "Cloud.ru · GigaChat3.5-432B-A28B",
+      "description": "Через LiteLLM. Прежние Chat/tools проверки прошли. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 2,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "deepseek-ai/DeepSeek-V4-Pro",
+      "display_name": "Cloud.ru · DeepSeek-V4-Pro",
+      "description": "Через LiteLLM. Прежние Chat/tools проверки прошли. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 3,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "moonshotai/Kimi-K2.6",
+      "display_name": "Cloud.ru · Kimi-K2.6",
+      "description": "Через LiteLLM. Прежние Chat/tools проверки прошли. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 4,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "zai-org/GLM-5.1",
+      "display_name": "Cloud.ru · GLM-5.1",
+      "description": "Через LiteLLM. Прежние Chat/tools проверки прошли. Живая сессия Codex не проверялась. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 5,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    }
+  ]
+}

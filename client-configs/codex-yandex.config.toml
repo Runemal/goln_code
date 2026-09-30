@@ -4,6 +4,9 @@
 
 model = "yandex/chat"
 model_provider = "litellm_yandex"
+# Установите client-configs/codex-yandex.models.json по этому пути.
+# В меню /model будут только настроенные chat-маршруты Яндекса.
+model_catalog_json = "~/.codex/model-catalogs/yandex-models.json"
 
 # Консервативный лимит контекста клиента, а не заявленная ёмкость модели.
 model_context_window = 32768

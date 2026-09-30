@@ -1,0 +1,31 @@
+# Профиль Codex для Cloud.ru через локальный LiteLLM.
+# Установите как ~/.codex/cloudru-gateway.config.toml:
+# codex --profile cloudru-gateway
+# Каталог содержит шесть совместимых маршрутов работающего шлюза.
+# LITELLM_MASTER_KEY — ключ шлюза; ключ Cloud.ru хранится на сервере.
+
+model = "ai-sage/GigaChat3-10B-A1.8B"
+model_provider = "litellm_cloudru"
+model_catalog_json = "~/.codex/model-catalogs/cloudru-models.json"
+
+# Консервативные клиентские лимиты; не максимальная ёмкость всех моделей.
+model_context_window = 32768
+model_auto_compact_token_limit = 24000
+model_supports_reasoning_summaries = false
+model_reasoning_summary = "none"
+web_search = "disabled"
+
+[model_providers.litellm_cloudru]
+name = "LiteLLM Cloud.ru"
+base_url = "http://127.0.0.1:4001/v1"
+env_key = "LITELLM_MASTER_KEY"
+env_key_instructions = "Экспортируйте ключ локального шлюза LiteLLM, не ключ Cloud.ru."
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false
+request_max_retries = 0
+stream_max_retries = 0
+stream_idle_timeout_ms = 300000
+
+[features]
+enable_request_compression = false

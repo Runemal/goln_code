@@ -1,0 +1,52 @@
+{
+  "models": [
+    {
+      "slug": "yandex/chat",
+      "display_name": "AliceAI LLM Flash",
+      "description": "Через LiteLLM. Chat/Responses/SSE/tools проверены; полная сессия Codex не проверена. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 0,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    },
+    {
+      "slug": "yandex/lite",
+      "display_name": "YandexGPT Lite — не проверена",
+      "description": "Через LiteLLM. Маршрут настроен; inference и tools этой модели не проверялись. Платная модель.",
+      "default_reasoning_level": null,
+      "supported_reasoning_levels": [],
+      "shell_type": "unified_exec",
+      "visibility": "list",
+      "supported_in_api": true,
+      "priority": 1,
+      "support_verbosity": false,
+      "context_window": 32768,
+      "input_modalities": [
+        "text"
+      ],
+      "supports_search_tool": false,
+      "supports_reasoning_effort_updates": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 10000
+      },
+      "experimental_supported_tools": [],
+      "base_instructions": "You are a coding assistant working with the user in their workspace. Follow system and developer instructions. Inspect relevant files before editing, make focused changes, and verify the behavior you changed. Use the available tools when needed and respect their schemas. Keep credentials private. Ask for missing information when necessary. Report changes, verification and limitations honestly. Communicate in the user's language."
+    }
+  ]
+}

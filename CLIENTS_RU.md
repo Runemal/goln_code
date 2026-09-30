@@ -174,6 +174,22 @@ OpenCode подставляет ключ из окружения благода�
 
 Для Codex доступен мост Responses → Chat Completions с hook `cloudru_compat.py`, сохраняющим порядок tool history. Его регрессии проверяются без сети; текущие живые Responses/SSE Cloud.ru не тестировались. При выборе платной модели отдельно настройте лимиты и повторы клиента: `request_max_retries` / `stream_max_retries` в NVIDIA-шаблоне не управляются `num_retries: 0` на шлюзе.
 
+Для текущего развёртывания подготовлены [client-configs/codex-cloudru.config.toml](client-configs/codex-cloudru.config.toml) и [client-configs/codex-cloudru.models.json](client-configs/codex-cloudru.models.json). Они используют шесть старых точных имён маршрутов, сохранённых в рабочем шлюзе и конфигурации проекта. Эти маршруты всегда идут в Cloud.ru, даже без префикса `cloudru/`.
+
+```bash
+mkdir -p ~/.codex/model-catalogs
+cp client-configs/codex-cloudru.models.json ~/.codex/model-catalogs/cloudru-models.json
+cp client-configs/codex-cloudru.config.toml ~/.codex/cloudru-gateway.config.toml
+# LITELLM_MASTER_KEY должен быть экспортирован, как описано в начале документа.
+codex --profile cloudru-gateway
+```
+
+По умолчанию — `ai-sage/GigaChat3-10B-A1.8B`. В `/model` доступны GigaChat3, GigaChat3.5, DeepSeek V4 Pro, Kimi K2.6, GLM 5.1 и MiniMax M3. MiniMax помечен прежним таймаутом; добавление в меню не подтверждает работоспособность. Расширенные `cloudru/*` маршруты проекта добавляются в клиентский каталог только после их применения к конкретному шлюзу. Клиентский контекст ограничен 32768 токенами, HTTP/SSE-повторы отключены. Для другой модели upstream это не заявление о её максимальном контексте.
+
+Имя `cloudru-gateway` отличает этот профиль от возможного `cloudru` с прямым подключением к провайдеру. Существующие прямые профили и их ключи не требуется менять или переносить в проект.
+
+Профиль и локальный каталог проверены Codex 0.159.2 без генерации. Новых запросов к Cloud.ru не выполнялось; живые Responses/SSE и агентная сессия с этим профилем не проверялись. Ключ провайдера не записывается в клиентские файлы.
+
 ## Яндекс AI Studio
 
 Модель выбирается явно: `yandex/chat` или `yandex/lite`. Серверный LiteLLM хранит API-ключ Яндекса и ID каталога в окружении; клиент использует `LITELLM_MASTER_KEY`. Для Responses применяется мост в Chat Completions. Возможность работы с инструментами зависит от выбранной модели; живые результаты указаны в [MODEL_STATUS.md](MODEL_STATUS.md).
@@ -181,10 +197,16 @@ OpenCode подставляет ключ из окружения благода�
 Для Codex подготовлен отдельный профиль [client-configs/codex-yandex.config.toml](client-configs/codex-yandex.config.toml). Он выбирает `yandex/chat` (AliceAI LLM Flash при стандартных настройках шлюза), использует Responses API и отключает HTTP/SSE-повторы клиента. `num_retries: 0` на шлюзе само по себе не управляет повторами Codex.
 
 ```bash
+mkdir -p ~/.codex/model-catalogs
+cp client-configs/codex-yandex.models.json ~/.codex/model-catalogs/yandex-models.json
 cp client-configs/codex-yandex.config.toml ~/.codex/yandex.config.toml
 # LITELLM_MASTER_KEY должен быть экспортирован, как описано в начале документа.
 codex --profile yandex
 ```
+
+По умолчанию выбран `yandex/chat` → AliceAI LLM Flash (`latest`). В консоли команда `/model` открывает отдельный список из [client-configs/codex-yandex.models.json](client-configs/codex-yandex.models.json): AliceAI LLM Flash (`yandex/chat`) и YandexGPT Lite (`yandex/lite`, не проверена). Список содержит только два настроенных chat-маршрута; embeddings и speech/realtime для этого меню не подходят. Если upstream маршрута изменён в `.env`, обновите его отображаемое имя в JSON.
+
+`model_catalog_json` задаёт локальный каталог для выбранного профиля. Он не создаёт маршруты на шлюзе и не подтверждает возможности модели: обычный `/v1/models` не содержит всех метаданных, которые нужны Codex. Каталог содержит краткие общие инструкции ассистенту и консервативные параметры клиента. Для другого провайдера можно подготовить свой JSON и указать его в соответствующем `*.config.toml`; остальные профили при этом сохраняют свои каталоги. Настройка проверена с Codex 0.159.2 без генерации.
 
 API-ключ Яндекса и ID каталога нужны только шлюзу. В профиль они не записываются. Адрес `127.0.0.1:4001` рассчитан на Codex на Docker-хосте; для другого компьютера используйте доступный ему адрес или SSH-туннель. Профиль содержит консервативный клиентский предел контекста 32768 токенов с компактизацией на 24000; это не утверждение о максимальном контексте провайдера.
 
